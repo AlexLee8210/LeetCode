@@ -5,43 +5,20 @@ class Solution {
         char[] arr2 = b.toCharArray();
         StringBuilder sb = new StringBuilder();
         int n1 = arr1.length - 1, n2 = arr2.length - 1;
-        while (n1 >= 0 && n2 >= 0) {
-            int dig = arr1[n1] - '0' + arr2[n2] - '0' + carry;
+        while (n1 >= 0 || n2 >= 0 || carry > 0) {
+            int dig = carry;
+            if (n1 >= 0) dig += arr1[n1] - '0';
+            if (n2 >= 0) dig += arr2[n2] - '0';
             if (dig >= 2) {
                 dig -= 2;
                 carry = 1;
             } else {
                 carry = 0;
             }
-            sb.insert(0, dig);
+            sb.append(dig);
             n1--;
             n2--;
         }
-        while (n1 >= 0) {
-            int dig = arr1[n1] - '0' + carry;
-            if (dig >= 2) {
-                dig -= 2;
-                carry = 1;
-            } else {
-                carry = 0;
-            }
-            sb.insert(0, dig);
-            n1--;
-        }
-        while (n2 >= 0) {
-            int dig = arr2[n2] - '0' + carry;
-            if (dig >= 2) {
-                dig -= 2;
-                carry = 1;
-            } else {
-                carry = 0;
-            }
-            sb.insert(0, dig);
-            n2--;
-        }
-        if (carry > 0) {
-            sb.insert(0, carry);
-        }
-        return sb.toString();
+        return sb.reverse().toString();
     }
 }
