@@ -3,11 +3,11 @@ class Solution {
         char[] chars = s.toCharArray();
         int l = 0, r = chars.length - 1;
         while (l <= r) {
-            if (!(Character.isDigit(chars[l]) || Character.isLetter(chars[l]))) {
+            if (!Character.isLetterOrDigit(chars[l])) {
                 l++;
                 continue;
             }
-            if (!(Character.isDigit(chars[r]) || Character.isLetter(chars[r]))) {
+            if (!Character.isLetterOrDigit(chars[r])) {
                 r--;
                 continue;
             }
