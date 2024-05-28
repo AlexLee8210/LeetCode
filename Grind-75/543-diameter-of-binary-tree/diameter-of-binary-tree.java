@@ -20,6 +20,7 @@ class Solution {
         return ans[0];
     }
 
+    /* Returns height, sets diameter in diam */
     private int height(TreeNode node, int[] diam) {
         if (node == null) return 0;
         int lHeight = height(node.left, diam);
