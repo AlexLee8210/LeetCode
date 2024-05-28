@@ -3,23 +3,23 @@ class Solution {
         Stack<Character> stack1 = new Stack<>();
         Stack<Character> stack2 = new Stack<>();
         for (char c : s.toCharArray()) {
-            if (c == '#') {
-                if (!stack1.isEmpty()) {
-                    stack1.pop();
-                }
-            } else {
+            if (c != '#') {
                 stack1.push(c);
+            } else if (!stack1.isEmpty()) {
+                stack1.pop();
             }
         }
         for (char c : t.toCharArray()) {
-            if (c == '#') {
-                if (!stack2.isEmpty()) {
-                    stack2.pop();
-                }
-            } else {
+            if (c != '#') {
                 stack2.push(c);
+            } else if (!stack2.isEmpty()) {
+                stack2.pop();
             }
         }
-        return String.valueOf(stack1).equals(String.valueOf(stack2));
+        while (!stack1.isEmpty()) {
+            if (stack2.isEmpty()) return false;
+            if (stack1.pop() != stack2.pop()) return false;
+        }
+        return stack2.isEmpty();
     }
 }
