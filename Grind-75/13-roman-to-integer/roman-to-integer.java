@@ -1,15 +1,16 @@
 class Solution {
     public int romanToInt(String s) {
-
         int ans = 0;
         int prev = 0;
         int n = 0;
-        for (char c : s.toCharArray()) {
-            n = getNum(c);
-            if (prev < n) {
-                n -= prev * 2;
+        char[] chars = s.toCharArray();
+        for (int i = chars.length - 1; i >= 0; i--) {
+            n = getNum(chars[i]);
+            if (prev > n) {
+                ans -= n;
+            } else {
+                ans += n;
             }
-            ans += n;
             prev = n;
         }
         return ans;
