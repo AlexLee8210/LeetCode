@@ -1,25 +1,30 @@
 class Solution {
     public int romanToInt(String s) {
-        HashMap<Character, Integer> map = new HashMap<>();
-        map.put('M', 1000);
-        map.put('D', 500);
-        map.put('C', 100);
-        map.put('L', 50);
-        map.put('X', 10);
-        map.put('V', 5);
-        map.put('I', 1);
 
         int ans = 0;
         int prev = 0;
         int n = 0;
         for (char c : s.toCharArray()) {
-            n = map.get(c);
+            n = getNum(c);
             if (prev < n) {
-                n -= 2 * prev;
+                n -= prev * 2;
             }
             ans += n;
             prev = n;
         }
         return ans;
+    }
+
+    private int getNum(char c) {
+        switch (c) {
+            case 'M': return 1000;
+            case 'D': return 500;
+            case 'C': return 100;
+            case 'L': return 50;
+            case 'X': return 10;
+            case 'V': return 5;
+            case 'I': return 1;
+        }
+        return -1;
     }
 }
