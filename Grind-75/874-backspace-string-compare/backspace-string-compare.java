@@ -20,10 +20,6 @@ class Solution {
                 stack2.push(c);
             }
         }
-        while (!stack1.isEmpty()) {
-            if (stack2.isEmpty()) return false;
-            if (stack1.pop() != stack2.pop()) return false;
-        }
-        return stack2.isEmpty();
+        return String.valueOf(stack1).equals(String.valueOf(stack2));
     }
 }
