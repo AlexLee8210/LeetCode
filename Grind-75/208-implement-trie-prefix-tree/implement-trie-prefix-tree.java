@@ -2,21 +2,28 @@ class Trie {
 
     private class Node {
         public char val;
-        public HashMap<Character, Node> adj;
+        // public HashMap<Character, Node> adj;
+        public Node[] adj;
         public boolean end;
         public Node(char _val) {
             val = _val;
-            adj = new HashMap<>();
+            // adj = new HashMap<>();
+            adj = new Node[26];
             end = false;
         }
 
+        public Node get(char c) {
+            return adj[c - 'a'];
+        }
         public boolean hasAdj(char c) {
-            return adj.containsKey(c);
+            // return adj.containsKey(c);
+            return get(c) != null;
         }
         public Node addAdj(char c) {
-            if (hasAdj(c)) return adj.get(c);
+            // if (hasAdj(c)) return adj.get(c);
+            if (hasAdj(c)) return get(c);
             Node newNode = new Node(c);
-            adj.put(c, newNode);
+            adj[c - 'a'] = newNode;
             return newNode;
         }
     }
@@ -39,7 +46,7 @@ class Trie {
         Node cur = root;
         for (char c : word.toCharArray()) {
             if (!cur.hasAdj(c)) return false;
-            cur = cur.adj.get(c);
+            cur = cur.get(c);
         }
         return cur.end;
     }
@@ -48,7 +55,7 @@ class Trie {
         Node cur = root;
         for (char c : prefix.toCharArray()) {
             if (!cur.hasAdj(c)) return false;
-            cur = cur.adj.get(c);
+            cur = cur.get(c);
         }
         return true;
     }
