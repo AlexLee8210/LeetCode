@@ -16,6 +16,7 @@ class Solution {
         while (canTake.size() != numCourses) {
             int prevSize = canTake.size();
             for (int course : map.keySet()) {
+                if (canTake.contains(course)) continue;
                 HashSet<Integer> prereqs = map.get(course);
                 boolean valid = true;
                 for (int pre : prereqs) {
