@@ -1,12 +1,15 @@
 class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
         int[] indegree = new int[numCourses];
-        HashMap<Integer, HashSet<Integer>> map = new HashMap<>();
-        for (int[] course : prerequisites) {
-            HashSet<Integer> prereq = map.getOrDefault(course[1], new HashSet<>());
-            prereq.add(course[0]);
-            map.put(course[1], prereq);
-            indegree[course[0]]++;
+        ArrayList<Integer>[] adj = new ArrayList[numCourses];
+        for (int[] pair : prerequisites) {
+            int prereq = pair[1];
+            int course = pair[0];
+            if (adj[prereq] == null) {
+                adj[prereq] = new ArrayList<>();
+            }
+            adj[prereq].add(course);
+            indegree[course]++;
         }
         // System.out.println(map);
         // System.out.println(Arrays.toString(indegree));
@@ -18,12 +21,12 @@ class Solution {
         }
         while (!q.isEmpty()) {
             int course = q.poll();
-            HashSet<Integer> postreqs = map.get(course);
-            if (postreqs == null) continue;
-            for (int postreq : postreqs) {
-                indegree[postreq]--;
-                if (indegree[postreq] == 0) {
-                    q.offer(postreq);
+            ArrayList<Integer> prereqs = adj[course];
+            if (prereqs == null) continue;
+            for (int prereq : prereqs) {
+                indegree[prereq]--;
+                if (indegree[prereq] == 0) {
+                    q.offer(prereq);
                 }
             }
         }
