@@ -2,29 +2,26 @@ class Solution {
     public int evalRPN(String[] tokens) {
         Stack<Integer> numStack = new Stack<>();
         for (String token : tokens) {
-            try {
-                int n = Integer.parseInt(token);
-                numStack.push(n);
-            } catch (Exception e) {
-                int n2 = numStack.pop();
-                int n1 = numStack.pop();
-                numStack.push(op(token, n1, n2));
-            }
+            int n = process(token, numStack);
+            numStack.push(n);
         }
         return numStack.pop();
     }
 
-    private int op(String op, int n1, int n2) {
-        switch (op) {
+    private int process(String token, Stack<Integer> stack) {
+        switch (token) {
             case "+":
-                return n1 + n2;
+                return stack.pop() + stack.pop();
             case "-":
-                return n1 - n2;
+                int n = stack.pop();
+                return stack.pop() - n;
             case "*":
-                return n1 * n2;
+                return stack.pop() * stack.pop();
             case "/":
-                return n1 / n2;
+                n = stack.pop();
+                return stack.pop() / n;
+            default:
+                return Integer.parseInt(token);
         }
-        return 0;
     }
 }
