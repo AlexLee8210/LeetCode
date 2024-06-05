@@ -15,26 +15,26 @@
  */
 class Solution {
     public boolean isValidBST(TreeNode root) {
-        return isValidHelper(root, Integer.MAX_VALUE, false, Integer.MIN_VALUE, false);
+        Stack<Integer> stack = new Stack<>();
+        inOrder(root, stack);
+        int prev = Integer.MAX_VALUE;
+        if (stack.peek() == prev) {
+            stack.pop();
+        }
+        while (!stack.isEmpty()) {
+            int val = stack.pop();
+            if (val >= prev) {
+                return false;
+            }
+            prev = val;
+        }
+        return true;
     }
 
-    private boolean isValidHelper(TreeNode node,int lt, boolean ltSet, int gt, boolean gtSet) {
-        if (node.left == null && node.right == null) {
-            return true;
-        } else if (node.right == null) {
-            lt = Math.min(node.val, lt);
-            boolean valid = node.left.val < lt && (!gtSet || node.left.val > gt);
-            return valid && isValidHelper(node.left, lt, true, gt, gtSet);
-        } else if (node.left == null) {
-            gt = Math.max(node.val, gt);
-            boolean valid = node.right.val > gt && (!ltSet || node.right.val < lt);
-            return valid && isValidHelper(node.right, lt, ltSet, gt, true);
-        }
-        int newLt = Math.min(node.val, lt);
-        int newGt = Math.max(node.val, gt);
-        // System.out.println("At " + node.val + ", " + node.left " > " + newGTt)
-        boolean valid = node.left.val < newLt && (!gtSet || node.left.val > gt);
-        valid = valid && (!ltSet || node.right.val < lt) && node.right.val > newGt;
-        return valid && isValidHelper(node.right, lt, ltSet, newGt, true) && isValidHelper(node.left, newLt, true, gt, gtSet);
+    private void inOrder(TreeNode node, Stack<Integer> stack) {
+        if (node == null) return;
+        inOrder(node.left, stack);
+        stack.push(node.val);
+        inOrder(node.right, stack);
     }
 }
