@@ -1,13 +1,12 @@
 class Solution {
     public int numIslands(char[][] grid) {
-        boolean[][] vis = new boolean[grid.length][grid[0].length];
         int num = 0;
         for (int r = 0; r < grid.length; r++) {
             for (int c = 0; c < grid[0].length; c++) {
                 if (grid[r][c] == '0') {
                     continue;
                 }
-                if (traverse(grid, r, c, vis)) {
+                if (traverse(grid, r, c)) {
                     num++;
                 }
             }
@@ -15,10 +14,7 @@ class Solution {
         return num;
     }
 
-    private boolean traverse(char[][] grid, int r, int c, boolean[][] vis) {
-        if (vis[r][c]) {
-            return false;
-        }
+    private boolean traverse(char[][] grid, int r, int c) {
         Queue<Pair<Integer, Integer>> q = new LinkedList<>();
         q.offer(new Pair<>(r, c));
         while (!q.isEmpty()) {
@@ -27,8 +23,7 @@ class Solution {
             int col = pair.getValue();
             if (!isValid(grid.length, grid[0].length, row, col)) continue;
             if (grid[row][col] == '0') continue;
-            if (vis[row][col]) continue;
-            vis[row][col] = true;
+            grid[row][col] = '0';
             q.offer(new Pair<>(row - 1, col));
             q.offer(new Pair<>(row + 1, col));
             q.offer(new Pair<>(row, col - 1));
