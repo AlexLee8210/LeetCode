@@ -38,18 +38,6 @@ class Solution {
             }
         }
         return numRotted == freshCount ? min : -1;
-        // int max = 0;
-        
-        // // for (int r = 0; r < m; r++) {
-        // //     System.out.println(Arrays.toString(grid[r]));
-        // // }
-        // for (int r = 0; r < m; r++) {
-        //     for (int c = 0; c < n; c++) {
-        //         if (grid[r][c] == 1) return -1;
-        //         max = Math.max(grid[r][c] - 2, max);
-        //     }
-        // }
-        // return max;
     }
 
     private boolean isValid(int m, int n, int r, int c) {
