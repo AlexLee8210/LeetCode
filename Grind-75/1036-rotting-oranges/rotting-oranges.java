@@ -8,48 +8,48 @@ class Solution {
     }
 
     public int orangesRotting(int[][] grid) {
+        int[][] dirs = new int[][]{new int[]{-1, 0}, new int[]{0, -1}, new int[]{1, 0}, new int[]{0, 1}};
         Queue<Pair<Point, Integer>> q = new LinkedList<>();
         int m = grid.length, n = grid[0].length;
+        int freshCount = 0;
         for (int r = 0; r < m; r++) {
             for (int c = 0; c < n; c++) {
+                if (grid[r][c] == 1) freshCount++;
                 if (grid[r][c] == 2) q.offer(new Pair<>(new Point(r, c), 0));
             }
         }
-        bfs(grid, q);
-        int max = 0;
-        
-        // for (int r = 0; r < m; r++) {
-        //     System.out.println(Arrays.toString(grid[r]));
-        // }
-        for (int r = 0; r < m; r++) {
-            for (int c = 0; c < n; c++) {
-                if (grid[r][c] == 1) return -1;
-                max = Math.max(grid[r][c] - 2, max);
-            }
-        }
-        return max;
-    }
-
-    private void bfs(int[][] grid, Queue<Pair<Point, Integer>> q) {
-        int m = grid.length, n = grid[0].length;
-        boolean[][] vis = new boolean[m][n];
+        if (freshCount == 0) return 0;
+        int numRotted = 0;
+        int min = 0;
         while (!q.isEmpty()) {
             Pair<Point, Integer> p = q.poll();
             int r = p.getKey().x;
             int c = p.getKey().y;
             int minToRot = p.getValue();
-            if (!isValid(m, n, r, c)) continue;
+            min = Math.max(minToRot, min);
             if (grid[r][c] == 0) continue;
-            // if (grid[r][c] <= 2) {
-            if (!vis[r][c] && grid[r][c] <= 2) {
-                vis[r][c] = true;
-                grid[r][c] = grid[r][c] == 1 ? 2 + minToRot : 2;
-                q.offer(new Pair<>(new Point(r - 1, c), minToRot + 1));
-                q.offer(new Pair<>(new Point(r, c - 1), minToRot + 1));
-                q.offer(new Pair<>(new Point(r + 1, c), minToRot + 1));
-                q.offer(new Pair<>(new Point(r, c + 1), minToRot + 1));
+            for (int[] dir : dirs) {
+                int newR = r + dir[0], newC = c + dir[1];
+                if (isValid(m, n, newR, newC) && grid[newR][newC] == 1) {
+                    grid[newR][newC] = 2;
+                    q.offer(new Pair<>(new Point(newR, newC), minToRot + 1));
+                    numRotted++;
+                }
             }
         }
+        return numRotted == freshCount ? min : -1;
+        // int max = 0;
+        
+        // // for (int r = 0; r < m; r++) {
+        // //     System.out.println(Arrays.toString(grid[r]));
+        // // }
+        // for (int r = 0; r < m; r++) {
+        //     for (int c = 0; c < n; c++) {
+        //         if (grid[r][c] == 1) return -1;
+        //         max = Math.max(grid[r][c] - 2, max);
+        //     }
+        // }
+        // return max;
     }
 
     private boolean isValid(int m, int n, int r, int c) {
