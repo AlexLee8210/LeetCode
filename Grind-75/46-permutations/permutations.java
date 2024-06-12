@@ -1,27 +1,22 @@
 class Solution {
     public List<List<Integer>> permute(int[] nums) {
         List<List<Integer>> result = new ArrayList<>();
-        List<Integer> list = new ArrayList<Integer>(nums.length);
-        for (int i : nums) {
-            list.add(i);
-        }
-        helper(list, result, new ArrayList<>());
+        helper(nums, result, new ArrayList<>(), new HashSet<>());
         return result;
     }
 
-    private void helper(List<Integer> nums, List<List<Integer>> result, List<Integer> perm) {
-        if (nums.size() == 0) {
+    private void helper(int[] nums, List<List<Integer>> result, List<Integer> perm, Set<Integer> cur) {
+        if (cur.size() == nums.length) {
             result.add(new ArrayList<>(perm));
             return;
         }
-        System.out.println(nums);
-        for (int i = 0; i < nums.size(); i++) {
-            int temp = nums.get(i);
-            nums.remove(i);
-            perm.add(temp);
-            helper(nums, result, perm);
+        for (int i = 0; i < nums.length; i++) {
+            if (cur.contains(nums[i])) continue;
+            cur.add(nums[i]);
+            perm.add(nums[i]);
+            helper(nums, result, perm, cur);
             perm.remove(perm.size() - 1);
-            nums.add(i, temp);
+            cur.remove(nums[i]);
         }
     }
 }
