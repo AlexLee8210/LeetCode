@@ -56,7 +56,7 @@ class TimeMap {
     }
     
     public void set(String key, String value, int timestamp) {
-        TreeMap<Integer, String> tmap = timeMap.getOrDefault(key, new TreeMap<>(Collections.reverseOrder()));
+        TreeMap<Integer, String> tmap = timeMap.getOrDefault(key, new TreeMap<>());
         tmap.put(timestamp, value);
         timeMap.put(key, tmap);
     }
@@ -64,17 +64,8 @@ class TimeMap {
     public String get(String key, int timestamp) {
         TreeMap<Integer, String> tmap = timeMap.get(key);
         if (tmap == null) return "";
-        if (tmap.containsKey(timestamp)) {
-            return tmap.get(timestamp);
-        }
-        int foundTS = -1;
-        for (int ts : tmap.keySet()) {
-            if (ts <= timestamp) {
-                foundTS = ts;
-                break;
-            }
-        }
-        return foundTS < 0 ? "" : tmap.get(foundTS);
+        Integer floorTS = tmap.floorKey(timestamp);
+        return floorTS == null ? "" : tmap.get(floorTS);
     }
 }
 
