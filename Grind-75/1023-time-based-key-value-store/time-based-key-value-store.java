@@ -56,9 +56,13 @@ class TimeMap {
     }
     
     public void set(String key, String value, int timestamp) {
-        TreeMap<Integer, String> tmap = timeMap.getOrDefault(key, new TreeMap<>());
-        tmap.put(timestamp, value);
-        timeMap.put(key, tmap);
+        if (timeMap.containsKey(key)) {
+            timeMap.get(key).put(timestamp, value);
+        } else {
+            TreeMap<Integer, String> tmap = new TreeMap<>();
+            tmap.put(timestamp, value);
+            timeMap.put(key, tmap);
+        }
     }
     
     public String get(String key, int timestamp) {
