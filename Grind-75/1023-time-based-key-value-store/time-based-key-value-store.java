@@ -1,75 +1,57 @@
-// class TimeMap {
-
-//     private class TimeValue implements Comparable<TimeValue> {
-//         public String value;
-//         public int timestamp;
-//         public TimeValue(String v, int t) {
-//             value = v;
-//             timestamp = t;
-//         }
-
-//         public int compareTo(TimeValue tv) {
-//             return tv.timestamp - timestamp;
-//         }
-
-//         public boolean equals(Object o) {
-//             TimeValue tv = (TimeValue) o;
-//             return timestamp == tv.timestamp;
-//         }
-//     }
-
-//     HashMap<String, TreeSet<TimeValue>> timeMap;
-
-//     public TimeMap() {
-//         timeMap = new HashMap<>();
-//     }
-    
-//     public void set(String key, String value, int timestamp) {
-//         TreeSet<TimeValue> set = timeMap.getOrDefault(key, new TreeSet<>());
-//         set.add(new TimeValue(value, timestamp));
-//         timeMap.put(key, set);
-//     }
-    
-//     public String get(String key, int timestamp) {
-//         TreeSet set = timeMap.get(key);
-//         String val = set.first().value;
-//         if (set.contains(new TimeValue(val, timestamp))) {
-//             return set.get().value;
-//         }
-//         return set.first().value;
-//     }
-// }
-
-// /**
-//  * Your TimeMap object will be instantiated and called as such:
-//  * TimeMap obj = new TimeMap();
-//  * obj.set(key,value,timestamp);
-//  * String param_2 = obj.get(key,timestamp);
-//  */
-
 class TimeMap {
 
-    HashMap<String, TreeMap<Integer, String>> timeMap;
+    private class TimeValue {
+        public String value;
+        public int timestamp;
+        public TimeValue(String v, int t) {
+            value = v;
+            timestamp = t;
+        }
+    }
+
+    HashMap<String, ArrayList<TimeValue>> timeMap;
 
     public TimeMap() {
         timeMap = new HashMap<>();
     }
     
     public void set(String key, String value, int timestamp) {
-        if (timeMap.containsKey(key)) {
-            timeMap.get(key).put(timestamp, value);
-        } else {
-            TreeMap<Integer, String> tmap = new TreeMap<>();
-            tmap.put(timestamp, value);
-            timeMap.put(key, tmap);
+        if (!timeMap.containsKey(key)) {
+            ArrayList<TimeValue> list = new ArrayList<>();
+            list.add(new TimeValue(value, timestamp));
+            timeMap.put(key, list);
+            return;
         }
+        timeMap.get(key).add(new TimeValue(value, timestamp));
+        // ArrayList<TimeValue> list = timeMap.get(key);
+        // int l = 0, r = list.size() - 1;
+        
+        // while (l <= r) {
+        //     int m = l + (r - l) / 2;
+        //     if (list.get(m).timestamp < timestamp) {
+        //         l = m + 1;
+        //     } else {
+        //         r = m - 1;
+        //     }
+        // }
+        // list.set(l, new TimeValue(value, timestamp));
     }
     
     public String get(String key, int timestamp) {
-        TreeMap<Integer, String> tmap = timeMap.get(key);
-        if (tmap == null) return "";
-        Integer floorTS = tmap.floorKey(timestamp);
-        return floorTS == null ? "" : tmap.get(floorTS);
+        ArrayList<TimeValue> list = timeMap.get(key);
+
+        int l = 0, r = list == null ? -1 : list.size() - 1;
+        String res = "";
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+            if (list.get(m).timestamp <= timestamp) {
+                l = m + 1;
+                res = list.get(m).value;
+            } else {
+                r = m - 1;
+            }
+        }
+        return res;
     }
 }
 
