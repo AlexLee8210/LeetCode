@@ -41,12 +41,9 @@ class Solution {
     public List<List<String>> accountsMerge(List<List<String>> accounts) {
         UnionFind uf = new UnionFind(accounts.size());
 
-        String[] names = new String[accounts.size()];
-
         HashMap<String, Integer> emailToId = new HashMap<>();
         for (int i = 0; i < accounts.size(); i++) {
             List<String> account = accounts.get(i);
-            names[i] = account.get(0);
             for (int j = 1; j < account.size(); j++) {
                 String email = account.get(j);
                 if (emailToId.containsKey(email)) {
@@ -73,7 +70,7 @@ class Solution {
         for (int id : idToEmails.keySet()) {
             ArrayList<String> emails = idToEmails.get(id);
             Collections.sort(emails);
-            emails.add(0, names[id]);
+            emails.add(0, accounts.get(id).get(0));
             result.add(emails);
         }
         return result;
