@@ -13,12 +13,12 @@ class Solution {
         HashSet<Integer> set = new HashSet<>();
         set.add(0);
         for (int i = 0; i < nums.length; i++) {
-            HashSet<Integer> newSet = new HashSet<>(set);
+            HashSet<Integer> newSet = new HashSet<>();
             for (int n : set) {
                 if (n + nums[i] == target) return true;
                 newSet.add(n + nums[i]);
             }
-            set = newSet;
+            set.addAll(newSet);
         }
         return false;
     }
