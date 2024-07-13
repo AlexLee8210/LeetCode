@@ -1,46 +1,28 @@
 class Solution {
     public List<Integer> findAnagrams(String s, String p) {
-        if (p.length() > s.length()) return new ArrayList<>();
         ArrayList<Integer> res = new ArrayList<>();
-        HashMap<Character, Integer> map = new HashMap<>();
-        for (char c : p.toCharArray()) {
-            map.put(c, map.getOrDefault(c, 0) + 1);
-        }
+        if (p.length() > s.length()) return res;
+
+        int[] freq = new int[26];
         for (int i = 0; i < p.length(); i++) {
-            char c = s.charAt(i);
-            int newVal = map.getOrDefault(c, 0) - 1;
-            if (newVal == 0) {
-                map.remove(c);
-            } else {
-                map.put(c, newVal);
-            }
+            freq[p.charAt(i) - 'a']++;
+            freq[s.charAt(i) - 'a']--;
         }
-        HashMap<Character, Integer> tempMap = new HashMap<>(map);
+
+        int l = 0;
+        if (isAnagram(freq)) res.add(0);
         for (int r = p.length(); r < s.length(); r++) {
-            int l = r - p.length();
-            if (map.size() == 0) {
-                res.add(l);
-            }
-
-            char c = s.charAt(l);
-            int newVal = map.getOrDefault(c, 0) + 1;
-            if (newVal == 0) {
-                map.remove(c);
-            } else {
-                map.put(c, newVal);
-            }
-
-            c = s.charAt(r);
-            newVal = map.getOrDefault(c, 0) - 1;
-            if (newVal == 0) {
-                map.remove(c);
-            } else {
-                map.put(c, newVal);
-            }
-        }
-        if (map.size() == 0) {
-            res.add(s.length() - p.length());
+            freq[s.charAt(l++) - 'a']++;
+            freq[s.charAt(r) - 'a']--;
+            if (isAnagram(freq)) res.add(l);
         }
         return res;
+    }
+
+    private boolean isAnagram(int[] freq) {
+        for (int i : freq) {
+            if (i != 0) return false;
+        }
+        return true;
     }
 }
