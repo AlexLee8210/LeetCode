@@ -21,11 +21,17 @@ class Solution {
             if (map.size() == 0) {
                 res.add(l);
             }
-            map.put(s.charAt(l), map.getOrDefault(s.charAt(l), 0) + 1);
-            if (map.get(s.charAt(l)) == 0) map.remove(s.charAt(l));
 
-            char c = s.charAt(r);
-            int newVal = map.getOrDefault(c, 0) - 1;
+            char c = s.charAt(l);
+            int newVal = map.getOrDefault(c, 0) + 1;
+            if (newVal == 0) {
+                map.remove(c);
+            } else {
+                map.put(c, newVal);
+            }
+
+            c = s.charAt(r);
+            newVal = map.getOrDefault(c, 0) - 1;
             if (newVal == 0) {
                 map.remove(c);
             } else {
