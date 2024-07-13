@@ -24,7 +24,7 @@ class Solution {
         for (char c : map.get(digits.charAt(index))) {
             sb.append(c);
             helper(digits, map, index + 1, res, sb);
-            sb.delete(sb.length() - 1, sb.length());
+            sb.deleteCharAt(sb.length() - 1);
         }
     }
 }
