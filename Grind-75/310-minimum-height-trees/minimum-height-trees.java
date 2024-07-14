@@ -1,29 +1,36 @@
 class Solution {
     public List<Integer> findMinHeightTrees(int n, int[][] edges) {
         if (n == 1) {
-            ArrayList<Integer> result = new ArrayList<>();
-            result.add(0);
-            return result;
+            ArrayList<Integer> mht = new ArrayList<>();
+            mht.add(0);
+            return mht;
         }
-        ArrayList<HashSet<Integer>> graph = new ArrayList<>(n);
-        for (int i = 0; i < n; i++) graph.add(new HashSet<>());
 
+        ArrayList<Integer>[] adj = new ArrayList[n];
+        int[] deg = new int[n];
+        for (int i = 0; i < n; i++) {
+            adj[i] = new ArrayList<>();
+        }
         for (int[] edge : edges) {
-            graph.get(edge[0]).add(edge[1]);
-            graph.get(edge[1]).add(edge[0]);
-        }
-        ArrayList<Integer> leaves = new ArrayList<>();
-        for (int i = 0; i < graph.size(); i++) {
-            if (graph.get(i).size() == 1) leaves.add(i);
+            adj[edge[0]].add(edge[1]);
+            adj[edge[1]].add(edge[0]);
+            deg[edge[0]]++;
+            deg[edge[1]]++;
         }
 
+        ArrayList<Integer> leaves = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            if (deg[i] == 1) leaves.add(i);
+        }
         while (n > 2) {
             n -= leaves.size();
             ArrayList<Integer> newLeaves = new ArrayList<>();
-            for (int leaf : leaves) {
-                int dest = graph.get(leaf).iterator().next();
-                graph.get(dest).remove(leaf);
-                if (graph.get(dest).size() == 1) newLeaves.add(dest);
+            for (int i = leaves.size() - 1; i >= 0; i--) {
+                int leaf = leaves.get(i);
+                int neighbor = adj[leaf].get(0);
+                adj[neighbor].remove(new Integer(leaf));
+                deg[neighbor]--;
+                if (deg[neighbor] == 1) newLeaves.add(neighbor);
             }
             leaves = newLeaves;
         }
