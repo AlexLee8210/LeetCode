@@ -14,24 +14,21 @@ class Solution {
         while (!pq.isEmpty()) {
             char task = pq.poll();
             Stack<Character> stack = new Stack<>();
-            while (!pq.isEmpty() && cooldown[task - 'A'] > 0) {
+            while (!pq.isEmpty() && cooldown[task - 'A'] > cycle) {
                 stack.push(task);
                 task = pq.poll();
             }
             while (!stack.isEmpty()) {
                 pq.offer(stack.pop());
             }
-            if (cooldown[task - 'A'] == 0) {
-                cooldown[task - 'A'] = n + 1;
+            if (cooldown[task - 'A'] <= cycle) {
+                cooldown[task - 'A'] = n + cycle + 1;
                 counts[task - 'A']--;
                 if (counts[task - 'A'] > 0) {
                     pq.offer(task);
                 }
             } else {
                 pq.offer(task);
-            }
-            for (int i = 0; i < cooldown.length; i++) {
-                if (cooldown[i] > 0) cooldown[i]--;
             }
             cycle++;
         }
