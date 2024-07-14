@@ -6,10 +6,10 @@ class Solution {
             return mht;
         }
 
-        ArrayList<Integer>[] adj = new ArrayList[n];
+        HashSet<Integer>[] adj = new HashSet[n];
         int[] deg = new int[n];
         for (int i = 0; i < n; i++) {
-            adj[i] = new ArrayList<>();
+            adj[i] = new HashSet<>();
         }
         for (int[] edge : edges) {
             adj[edge[0]].add(edge[1]);
@@ -27,8 +27,8 @@ class Solution {
             ArrayList<Integer> newLeaves = new ArrayList<>();
             for (int i = leaves.size() - 1; i >= 0; i--) {
                 int leaf = leaves.get(i);
-                int neighbor = adj[leaf].get(0);
-                adj[neighbor].remove(new Integer(leaf));
+                int neighbor = adj[leaf].iterator().next();
+                adj[neighbor].remove(leaf);
                 deg[neighbor]--;
                 if (deg[neighbor] == 1) newLeaves.add(neighbor);
             }
