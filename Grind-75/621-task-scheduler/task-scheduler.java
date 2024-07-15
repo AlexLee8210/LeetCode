@@ -1,37 +1,33 @@
 class Solution {
     public int leastInterval(char[] tasks, int n) {
-        int[] counts = new int[26];
-        for (char c : tasks) {
-            counts[c - 'A']++;
+     Map<Character, Integer> map = new HashMap<>();
+    for (int i = 0; i < tasks.length; i++) {
+        map.put(tasks[i], map.getOrDefault(tasks[i], 0) + 1); // map key is TaskName, and value is number of times to be executed.
+    }
+    PriorityQueue<Map.Entry<Character, Integer>> q = new PriorityQueue<>( //frequency sort
+            (a,b) -> a.getValue() != b.getValue() ? b.getValue() - a.getValue() : a.getKey() - b.getKey());
+
+    q.addAll(map.entrySet());
+
+    int count = 0;
+    while (!q.isEmpty()) {
+        int k = n + 1;
+        List<Map.Entry> tempList = new ArrayList<>();
+        while (k > 0 && !q.isEmpty()) {
+            Map.Entry<Character, Integer> top = q.poll(); // most frequency task
+            top.setValue(top.getValue() - 1); // decrease frequency, meaning it got executed
+            tempList.add(top); // collect task to add back to queue
+            k--;
+            count++; //successfully executed task
         }
 
-        PriorityQueue<Character> pq = new PriorityQueue<>((a, b) -> counts[b - 'A'] - counts[a - 'A']);
-        for (int i = 0; i < counts.length; i++) {
-            if (counts[i] > 0) pq.add((char)(i + 'A'));
+        for (Map.Entry<Character, Integer> e : tempList) {
+            if (e.getValue() > 0) q.add(e); // add valid tasks 
         }
-        int cycle = 0;
-        int[] cooldown = new int[26];
-        while (!pq.isEmpty()) {
-            char task = pq.poll();
-            Stack<Character> stack = new Stack<>();
-            while (!pq.isEmpty() && cooldown[task - 'A'] > cycle) {
-                stack.push(task);
-                task = pq.poll();
-            }
-            while (!stack.isEmpty()) {
-                pq.offer(stack.pop());
-            }
-            if (cooldown[task - 'A'] <= cycle) {
-                cooldown[task - 'A'] = n + cycle + 1;
-                counts[task - 'A']--;
-                if (counts[task - 'A'] > 0) {
-                    pq.offer(task);
-                }
-            } else {
-                pq.offer(task);
-            }
-            cycle++;
-        }
-        return cycle;
+
+        if (q.isEmpty()) break;
+        count = count + k; // if k > 0, then it means we need to be idle
+    }
+    return count;
     }
 }
