@@ -1,36 +1,30 @@
 class Solution {
     public boolean isValidSudoku(char[][] board) {
         boolean valid = true;
-        HashSet<Character> row, col;
+        HashSet<Character> row, col, grid;
         for (int r = 0; r < board.length; r++) {
             row = new HashSet<>();
             col = new HashSet<>();
+            grid = new HashSet<>();
             for (int c = 0; c < board.length; c++) {
-                if (Character.isDigit(board[r][c])) {
-                    if (row.contains(board[r][c])) return false;
-                    row.add(board[r][c]);
+                if (board[r][c] != '.' && !row.add(board[r][c])) {
+                    return false;
                 }
-                if (Character.isDigit(board[c][r])) {
-                    if (col.contains(board[c][r])) return false;
-                    col.add(board[c][r]);
+                if (board[c][r] != '.' && !col.add(board[c][r])) {
+                    return false;
                 }
-            }
-        }
-        for (int r = 0; r < board.length; r += 3) {
-            for (int c = 0; c < board[0].length; c += 3) {
-                if (!valid9(board, r, c)) return false;
-            }
-        }
-        return true;
-    }
+                int rIndex = (r / 3) * 3 + c / 3;
+                int cIndex = (r % 3) * 3 + c % 3;
+                if (board[rIndex][cIndex] != '.' && !grid.add(board[rIndex][cIndex])) {
+                    return false;
+                }
+                /*
+                r: 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
+                a: 0 0 0 1 1 1 2 2 2 0 0 0 1 1 1 2 2 2
 
-    private boolean valid9(char[][] board, int row, int col) {
-        HashSet<Character> seen = new HashSet<>();
-        for (int r = row; r < row + 3; r++) {
-            for (int c = col; c < col + 3; c++) {
-                if (!Character.isDigit(board[r][c])) continue;
-                if (seen.contains(board[r][c])) return false;
-                seen.add(board[r][c]);
+                c: 0 1 2 3 4 5 6 7 8 0 1 2 3 4 5 6 7 8
+                b: 0 1 2 0 1 2 0 1 2 0 1 2 0 1 2 0 1 2
+                */
             }
         }
         return true;
