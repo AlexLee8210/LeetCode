@@ -1,44 +1,34 @@
 class Solution {
     public int[] findOrder(int numCourses, int[][] prerequisites) {
-        HashMap<Integer, HashSet<Integer>> prereqs = new HashMap<>();
+        ArrayList<Integer>[] adj = new ArrayList[numCourses];
+        int[] indegree = new int[numCourses];
         for (int[] course : prerequisites) {
-            if (prereqs.containsKey(course[0])) {
-                prereqs.get(course[0]).add(course[1]);
-            } else {
-                HashSet<Integer> set = new HashSet<>();
-                set.add(course[1]);
-                prereqs.put(course[0], set);
+            if (adj[course[1]] == null) {
+                adj[course[1]] = new ArrayList<>();
+            }
+            adj[course[1]].add(course[0]);
+            indegree[course[0]]++;
+        }
+        Queue<Integer> q = new LinkedList<>();
+        for (int i = 0; i < numCourses; i++) {
+            if (indegree[i] == 0) {
+                q.offer(i);
             }
         }
-        LinkedHashSet<Integer> completed = new LinkedHashSet<>();
-        // Queue<Integer> q = new LinkedList<>();
-        for (int i = 0; i < numCourses; i++) {
-            if (prereqs.containsKey(i)) continue;
-            completed.add(i);
-            // q.offer(i);
-        }
-        int prevSize = 0;
-        int size = numCourses - completed.size();
-        while (size != prevSize) {
-            HashMap<Integer, HashSet<Integer>> temp = new HashMap<>();
-            for (int k : prereqs.keySet()) {
-                prereqs.get(k).removeAll(completed);
-                if (prereqs.get(k).size() == 0) {
-                    completed.add(k);
-                } else {
-                    temp.put(k, prereqs.get(k));
+        int[] res = new int[numCourses];
+        int index = 0;
+        while (!q.isEmpty()) {
+            int course = q.poll();
+            res[index++] = course;
+            if (adj[course] == null) continue;
+            for (int pre : adj[course]) {
+                indegree[pre]--;
+                if (indegree[pre] == 0) {
+                    q.offer(pre);
                 }
             }
-            prereqs = temp;
-            prevSize = size;
-            size = prereqs.size();
         }
-        if (size != 0) return new int[]{};
-        int[] res = new int[numCourses];
-        int idx = 0;
-        for (int course : completed) {
-            res[idx++] = course;
-        }
+        if (index != numCourses) return new int[]{};
         return res;
     }
 }
