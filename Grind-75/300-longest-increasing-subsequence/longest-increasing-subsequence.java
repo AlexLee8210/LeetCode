@@ -1,28 +1,30 @@
 class Solution {
     public int lengthOfLIS(int[] nums) {
-        HashMap<Integer, Integer> map = new HashMap<>();
-        int maxLength = 0;
-        int max = 0;
-        for (int i = nums.length - 1; i >= 0; i--) {
-            max = 1;
-            for (int k : map.keySet()) {
-                if (k > nums[i]) {
-                    max = Math.max(max, map.get(k) + 1);
-                }
+        ArrayList<Integer> res = new ArrayList<>();
+        res.add(nums[0]);
+        for (int i = 1; i < nums.length; i++) {
+            if (res.get(res.size() - 1) < nums[i]) {
+                res.add(nums[i]);
+            } else {
+                int idx = bs(res, nums[i]);
+                res.set(idx, nums[i]);
             }
-            map.put(nums[i], max);
-            maxLength = Math.max(max, maxLength);
         }
-        return maxLength;
-        // return helper(nums, 0, 0, Long.MIN_VALUE);
+        return res.size();
     }
 
-    // private int helper(int[] nums, int index, int len, long last) {
-    //     if (index == nums.length) return len;
-    //     int notChoose = helper(nums, index + 1, len, last);
-    //     if ((long) nums[index] > last) {
-    //         return Math.max(notChoose, helper(nums, index + 1, len + 1, nums[index]));
-    //     }
-    //     return notChoose;
-    // }
+    private int bs(ArrayList<Integer> list, int target) {
+        int l = 0, r = list.size() - 1;
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+            if (list.get(m) > target) {
+                r = m - 1;
+            } else if (list.get(m) < target) {
+                l = m + 1;
+            } else {
+                return m;
+            }
+        }
+        return l;
+    }
 }
