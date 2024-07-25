@@ -1,11 +1,4 @@
 class Solution {
-    private class Unit {
-        StringBuilder sb;
-        int k;
-        public Unit(int _k) {
-            k = _k;
-        }
-    }
     public String decodeString(String s) {
         s = "1[" + s + "]";
         return decode(s.toCharArray(), new int[1]).toString();
