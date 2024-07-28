@@ -8,8 +8,7 @@ class Solution {
         int r = cardPoints.length - k;
         int l = 0;
         while (r < cardPoints.length) {
-            sum += cardPoints[l++];
-            sum -= cardPoints[r++];
+            sum += cardPoints[l++] - cardPoints[r++];
             max = Math.max(max, sum);
         }
         return max;
