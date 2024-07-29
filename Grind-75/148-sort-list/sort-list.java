@@ -30,14 +30,8 @@ class Solution {
     private ListNode merge(ListNode n1, ListNode n2) {
         ListNode node = new ListNode();
         ListNode header = node;
-        while (n1 != null || n2 != null) {
-            if (n1 == null) {
-                node.next = n2;
-                n2 = n2.next;
-            } else if (n2 == null) {
-                node.next = n1;
-                n1 = n1.next;
-            } else if (n2.val < n1.val) {
+        while (n1 != null && n2 != null) {
+            if (n2.val < n1.val) {
                 node.next = n2;
                 n2 = n2.next;
             } else {
@@ -45,6 +39,11 @@ class Solution {
                 n1 = n1.next;
             }
             node = node.next;
+        }
+        if (n1 != null) {
+            node.next = n1;
+        } else if (n2 != null) {
+            node.next = n2;
         }
         return header.next;
     }
