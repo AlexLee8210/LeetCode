@@ -1,22 +1,22 @@
 class Solution {
     public int sumFourDivisors(int[] nums) {
-        int total = 0;
-        for (int i = 0; i < nums.length; i++) {
-            int sum = 0, cnt = 0;
-            for (int j = 1; j <= Math.sqrt(nums[i]); j++) {
-                if (nums[i] % j == 0) {
-                    if (j * j == nums[i]) {
-                        sum += j;
-                        cnt++;
+        int sum = 0;
+        for (int n : nums) {
+            int last_div = 0;
+            for (int div = 2; div <= Math.sqrt(n); div++) {
+                if (n % div == 0) {
+                    if (last_div == 0) {
+                        last_div = div;
                     } else {
-                        sum += nums[i] / j + j;
-                        cnt += 2;
+                        last_div = 0;
+                        break;
                     }
                 }
             }
-            
-            if (cnt == 4) total += sum;
+            if (last_div != 0 && last_div != n / last_div) {
+                sum += 1 + n + n / last_div + last_div;
+            }
         }
-        return total;
+        return sum;
     }
 }
