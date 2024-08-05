@@ -14,7 +14,7 @@ class Solution {
                     }
                 }
             }
-                System.out.println(sum);
+            
             if (cnt == 4) total += sum;
         }
         return total;
