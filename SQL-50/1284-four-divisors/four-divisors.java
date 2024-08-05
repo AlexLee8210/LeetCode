@@ -5,7 +5,7 @@ class Solution {
             int sum = 0, cnt = 0;
             for (int j = 1; j <= Math.sqrt(nums[i]); j++) {
                 if (nums[i] % j == 0) {
-                    if (nums[i] / j == j) {
+                    if (j * j == nums[i]) {
                         sum += j;
                         cnt++;
                     } else {
