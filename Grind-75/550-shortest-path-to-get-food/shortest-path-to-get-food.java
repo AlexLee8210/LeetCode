@@ -11,6 +11,7 @@ class Solution {
             for (int c = 0; c < grid[0].length; c++) {
                 if (grid[r][c] == '*') {
                     pos = new int[]{r, c, 0};
+                    break;
                 }
             }
             if (pos != null) break;
@@ -18,6 +19,7 @@ class Solution {
 
         pq.offer(pos);
 
+        // int step = 0;
         while (!pq.isEmpty()) {
             pos = pq.poll();
             if (vis[pos[0]][pos[1]]) continue;
