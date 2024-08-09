@@ -1,7 +1,7 @@
 class Solution {
     public int getFood(char[][] grid) {
         int m = grid.length, n = grid[0].length;
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[2] - b[2]);
+        Queue<int[]> pq = new LinkedList<>();
 
         int[][] dirs = new int[][]{{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
         boolean[][] vis = new boolean[m][n];
