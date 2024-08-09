@@ -19,21 +19,25 @@ class Solution {
 
         pq.offer(pos);
 
-        // int step = 0;
+        int step = 0;
         while (!pq.isEmpty()) {
-            pos = pq.poll();
-            if (vis[pos[0]][pos[1]]) continue;
-            vis[pos[0]][pos[1]] = true;
+            int len = pq.size();
+            step++;
+            for (int i = 0; i < len; i++) {
+                pos = pq.poll();
+                if (vis[pos[0]][pos[1]]) continue;
+                vis[pos[0]][pos[1]] = true;
 
-            for (int[] dir : dirs) {
-                int r = pos[0] + dir[0];
-                int c = pos[1] + dir[1];
-                if (!isValid(r, c, m, n)) continue;
+                for (int[] dir : dirs) {
+                    int r = pos[0] + dir[0];
+                    int c = pos[1] + dir[1];
+                    if (!isValid(r, c, m, n)) continue;
 
-                if (grid[r][c] == '#') {
-                    return pos[2] + 1;
-                } else if (grid[r][c] != 'X') {
-                    pq.offer(new int[]{r, c, pos[2] + 1});
+                    if (grid[r][c] == '#') {
+                        return step;
+                    } else if (grid[r][c] != 'X') {
+                        pq.offer(new int[]{r, c});
+                    }
                 }
             }
         }
