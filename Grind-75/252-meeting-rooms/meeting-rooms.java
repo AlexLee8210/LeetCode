@@ -1,17 +1,12 @@
 class Solution {
     public boolean canAttendMeetings(int[][] intervals) {
-        int[] nums = new int[(int)Math.pow(10, 6) + 1];
+        Arrays.sort(intervals, (int[] a, int[] b) -> a[0] - b[0]);
+        int prevEnd = -1;
         for (int[] interval : intervals) {
-            nums[interval[0]]++;
-            nums[interval[1]]--;
-        }
-
-        int sum = 0;
-        for (int n : nums) {
-            sum += n;
-            if (sum > 1) {
+            if (prevEnd > interval[0]) {
                 return false;
             }
+            prevEnd = interval[1];
         }
         return true;
     }
