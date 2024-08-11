@@ -19,6 +19,7 @@ class Solution {
             for (int r = 0; r < m; r++) {
                 for (int c = 0; c < n; c++) {
                     par[r][c] = new int[]{r, c};
+                    rank[r][c] = 1;
                 }
             }
         }
