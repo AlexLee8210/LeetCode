@@ -15,13 +15,6 @@ class Solution {
                 maxLen = Math.max(maxLen, dp[r][c]);
             }
         }
-        print(dp);
         return maxLen * maxLen;
-    }
-
-    private void print(int[][] mat) {
-        for (int r = 0; r < mat.length; r++) {
-            System.out.println(Arrays.toString(mat[r]));
-        }
     }
 }
