@@ -7,21 +7,14 @@ class Solution {
             int len = count * u;
             if (len > chars.length) break;
             int matches = 0;
-            for (int i = 0; i < len; i++) {
-                freq[chars[i] - 'a']++;
-                if (freq[chars[i] - 'a'] == count) {
-                    matches++;
-                } else if (freq[chars[i] - 'a'] - 1 == count) {
-                    matches--;
-                }
-            }
-            if (matches == u) res++;
-            for (int i = len; i < chars.length; i++) {
-                freq[chars[i - len] - 'a']--;
-                if (freq[chars[i - len] - 'a'] == count) {
-                    matches++;
-                } else if (freq[chars[i - len] - 'a'] + 1 == count) {
-                    matches--;
+            for (int i = 0; i < chars.length; i++) {
+                if (i >= len) {
+                    freq[chars[i - len] - 'a']--;
+                    if (freq[chars[i - len] - 'a'] == count) {
+                        matches++;
+                    } else if (freq[chars[i - len] - 'a'] + 1 == count) {
+                        matches--;
+                    }
                 }
                 freq[chars[i] - 'a']++;
                 if (freq[chars[i] - 'a'] == count) {
