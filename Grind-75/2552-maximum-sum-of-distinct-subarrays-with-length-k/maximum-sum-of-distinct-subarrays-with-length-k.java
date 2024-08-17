@@ -1,27 +1,34 @@
 class Solution {
     public long maximumSubarraySum(int[] nums, int k) {
+        int[] freq = new int[(int) Math.pow(10, 5) + 1];
+        long res = 0;
         long sum = 0;
-        boolean canUse = true;
-        HashMap<Integer, Integer> map = new HashMap<>();
+        int distinct = 0;
         for (int i = 0; i < k; i++) {
+            freq[nums[i]]++;
             sum += nums[i];
-            map.put(nums[i], map.getOrDefault(nums[i], 0) + 1);
-        }
-        long max = map.size() == k ? sum : 0;
-        for (int r = k; r < nums.length; r++) {
-            map.put(nums[r], map.getOrDefault(nums[r], 0) + 1);
-            int newLeft = map.get(nums[r - k]) - 1;
-            if (newLeft == 0) {
-                map.remove(nums[r - k]);
-            } else {
-                map.put(nums[r - k], newLeft);
-            }
-            sum += nums[r];
-            sum -= nums[r - k];
-            if (map.size() == k) {
-                max = Math.max(max, sum);
+            if (freq[nums[i]] == 1) {
+                distinct++;
             }
         }
-        return max;
+
+        if (distinct == k) {
+            res = Math.max(res, sum);
+        }
+        for (int i = k; i < nums.length; i++) {
+            freq[nums[i - k]]--;
+            if (freq[nums[i - k]] == 0) {
+                distinct--;
+            }
+            freq[nums[i]]++;
+            if (freq[nums[i]] == 1) {
+                distinct++;
+            }
+            sum += nums[i] - nums[i - k];
+            if (distinct == k) {
+                res = Math.max(res, sum);
+            }
+        }
+        return res;
     }
 }
