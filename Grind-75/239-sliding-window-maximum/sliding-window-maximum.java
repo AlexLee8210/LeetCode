@@ -2,23 +2,25 @@ class Solution {
     public int[] maxSlidingWindow(int[] nums, int k) {
         int[] res = new int[nums.length - k + 1];
         int index = 0;
-        TreeMap<Integer, Integer> tmap = new TreeMap<>();
+        Deque<Integer> dq = new LinkedList<>();
         
         for (int i = 0; i < k; i++) {
-            tmap.put(nums[i], tmap.getOrDefault(nums[i], 0) + 1);
+            while (!dq.isEmpty() && nums[i] > dq.peekLast()) {
+                dq.pollLast();
+            }
+            dq.addLast(nums[i]);
         }
-        res[index++] = tmap.lastKey();
+        res[index++] = dq.peekFirst();
 
         for (int i = k; i < nums.length; i++) {
-            int freq = tmap.get(nums[i - k]);
-            if (freq > 1) {
-                tmap.put(nums[i - k], freq - 1);
-            } else {
-                tmap.remove(nums[i - k]);
+            if (dq.peekFirst() == nums[i - k]) {
+                dq.pollFirst();
             }
-            tmap.put(nums[i], tmap.getOrDefault(nums[i], 0) + 1);
-
-            res[index++] = tmap.lastKey();
+            while (!dq.isEmpty() && nums[i] > dq.peekLast()) {
+                dq.pollLast();
+            }
+            dq.addLast(nums[i]);
+            res[index++] = dq.peekFirst();
         }
         return res;
     }
