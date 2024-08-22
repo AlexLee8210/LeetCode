@@ -1,32 +1,27 @@
 class Solution {
     public boolean isValid(String s) {
-        Set<Character> opens = new HashSet<>();
-        opens.add('(');
-        opens.add('{');
-        opens.add('[');
         Stack<Character> stack = new Stack<>();
         for (char c : s.toCharArray()) {
-            if (opens.contains(c)) {
+            if (isOpen(c)) {
                 stack.push(c);
-            } else {
-                if (stack.size() == 0) return false;
-                char open = getOpen(c);
-                char top = stack.pop();
-                if (top != open) return false;
+            } else if (stack.isEmpty() || stack.pop() != getOpen(c)) {
+                return false;
             }
         }
-        return stack.size() == 0;
+        return stack.isEmpty();
     }
+
+    private boolean isOpen(char c) {
+        return c == '(' || c == '[' || c == '{';
+    }
+
     private char getOpen(char c) {
-        switch (c) {
-            case '}':
-                return '{';
-            case ')':
-                return '(';
-            case ']':
-                return '[';
-            default:
-                return '0';
+        if (c == ')') {
+            return '(';
+        } else if (c == ']') {
+            return '[';
+        } else {
+            return '{';
         }
     }
 }
