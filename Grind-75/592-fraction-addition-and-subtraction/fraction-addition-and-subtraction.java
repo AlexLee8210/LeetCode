@@ -18,6 +18,18 @@ class Solution {
                 if (i - 1 >= 0 && chars[i - 1] != '/') {
                     denominators.push(cur * (isPositive ? 1 : -1));
                     cur = 0;
+
+                    if (denominators.size() > 1) {
+                        int n2 = numerators.pop();
+                        int n1 = numerators.pop();
+                        int d2 = denominators.pop();
+                        int d1 = denominators.pop();
+                        int gcd = gcd(d1, d2);
+                        n2 *= d1 / gcd;
+                        n1 *= d2 / gcd;
+                        numerators.push(n1 + n2);
+                        denominators.push(d1 / gcd * d2);
+                    }
                 }
                 isPositive = c == '+';
             }
@@ -25,7 +37,7 @@ class Solution {
         denominators.push(cur * (isPositive ? 1 : -1));
 
 
-        while (numerators.size() > 1) {
+        if (denominators.size() > 1) {
             int n2 = numerators.pop();
             int n1 = numerators.pop();
             int d2 = denominators.pop();
