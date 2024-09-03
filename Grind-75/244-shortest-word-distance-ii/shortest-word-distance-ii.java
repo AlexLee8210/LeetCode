@@ -1,12 +1,11 @@
 class WordDistance {
-
-    HashMap<String, TreeSet<Integer>> map;
+    HashMap<String, List<Integer>> map;
 
     public WordDistance(String[] wordsDict) {
         map = new HashMap<>();
         for (int i = 0; i < wordsDict.length; i++) {
             if (!map.containsKey(wordsDict[i])) {
-                map.put(wordsDict[i], new TreeSet<>());
+                map.put(wordsDict[i], new ArrayList<>());
             }
             map.get(wordsDict[i]).add(i);
         }
@@ -14,19 +13,18 @@ class WordDistance {
     
     public int shortest(String word1, String word2) {
         int min = Integer.MAX_VALUE;
-        TreeSet<Integer> word2Set = map.get(word2);
-        for (int i : map.get(word1)) {
-            Integer floor = word2Set.floor(i);
-            Integer ceiling = word2Set.ceiling(i);
-            if (floor == null && ceiling == null) {
-                continue;
-            } else if (floor == null) {
-                min = Math.min(ceiling - i, min);
-            } else if (ceiling == null) {
-                min = Math.min(i - floor, min);
+        List<Integer> list1 = map.get(word1);
+        List<Integer> list2 = map.get(word2);
+        int i = 0, j = 0;
+        while (i < list1.size() && j < list2.size()) {
+            int idx1 = list1.get(i);
+            int idx2 = list2.get(j);
+            if (idx1 < idx2) {
+                min = Math.min(min, idx2 - idx1);
+                i++;
             } else {
-                int dist = Math.min(i - floor, ceiling - i);
-                min = Math.min(dist, min);
+                min = Math.min(min, idx1 - idx2);
+                j++;
             }
         }
         return min;
