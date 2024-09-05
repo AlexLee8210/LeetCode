@@ -1,43 +1,25 @@
 class Trie {
 
     private class Node {
-        public char val;
-        // public HashMap<Character, Node> adj;
-        public Node[] adj;
-        public boolean end;
-        public Node(char _val) {
-            val = _val;
-            // adj = new HashMap<>();
-            adj = new Node[26];
+        boolean end;
+        Node[] adj;
+        public Node() {
             end = false;
-        }
-
-        public Node get(char c) {
-            return adj[c - 'a'];
-        }
-        public boolean hasAdj(char c) {
-            // return adj.containsKey(c);
-            return get(c) != null;
-        }
-        public Node addAdj(char c) {
-            // if (hasAdj(c)) return adj.get(c);
-            if (hasAdj(c)) return get(c);
-            Node newNode = new Node(c);
-            adj[c - 'a'] = newNode;
-            return newNode;
+            adj = new Node[26];
         }
     }
 
-    private Node root;
+    Node root;
 
     public Trie() {
-        root = new Node('\0');
+        root = new Node();
     }
     
     public void insert(String word) {
         Node cur = root;
         for (char c : word.toCharArray()) {
-            cur = cur.addAdj(c);
+            if (cur.adj[c - 'a'] == null) cur.adj[c - 'a'] = new Node();
+            cur = cur.adj[c - 'a'];
         }
         cur.end = true;
     }
@@ -45,8 +27,8 @@ class Trie {
     public boolean search(String word) {
         Node cur = root;
         for (char c : word.toCharArray()) {
-            if (!cur.hasAdj(c)) return false;
-            cur = cur.get(c);
+            if (cur.adj[c - 'a'] == null) return false;
+            cur = cur.adj[c - 'a'];
         }
         return cur.end;
     }
@@ -54,8 +36,8 @@ class Trie {
     public boolean startsWith(String prefix) {
         Node cur = root;
         for (char c : prefix.toCharArray()) {
-            if (!cur.hasAdj(c)) return false;
-            cur = cur.get(c);
+            if (cur.adj[c - 'a'] == null) return false;
+            cur = cur.adj[c - 'a'];
         }
         return true;
     }
