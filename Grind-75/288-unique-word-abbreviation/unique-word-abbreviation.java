@@ -6,9 +6,12 @@ class ValidWordAbbr {
         for (String k : dictionary) {
             String ab = abbr(k);
             if (!map.containsKey(ab)) {
-                map.put(ab, new HashSet<>());
+                HashSet<String> set = new HashSet<>();
+                set.add(k);
+                map.put(ab, set);
+            } else {
+                map.get(ab).add(k);
             }
-            map.get(ab).add(k);
         }
     }
 
