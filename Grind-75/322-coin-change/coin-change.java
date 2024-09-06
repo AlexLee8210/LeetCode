@@ -1,16 +1,7 @@
 class Solution {
     public int coinChange(int[] coins, int amount) {
         if (amount == 0) return 0;
-        // Arrays.sort(coins);
-        int minIdx = 0;
-        for (int i = 0; i < coins.length; i++) {
-            if (coins[minIdx] > coins[i]) {
-                minIdx = i;
-            }
-        }
-        int tmp = coins[0];
-        coins[0] = coins[minIdx];
-        coins[minIdx] = tmp;
+        Arrays.sort(coins);
         if (coins[0] > amount) return -1;
         int[] amounts = new int[amount + 1];
         for (int i = 1; i < coins[0]; i++) {
