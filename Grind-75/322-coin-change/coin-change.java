@@ -11,10 +11,7 @@ class Solution {
             int min = Integer.MAX_VALUE;
             for (int val : coins) {
                 int target = i - val;
-                if (target == 0) {
-                    min = 1;
-                    break;
-                } else if (target < 0 || amounts[target] == -1) {
+                if (target < 0 || amounts[target] == -1) {
                     continue;
                 }
                 min = Math.min(amounts[target] + 1, min);
