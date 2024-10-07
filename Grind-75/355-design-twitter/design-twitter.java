@@ -1,32 +1,44 @@
 class Twitter {
 
-    HashMap<Integer, List<int[]>> tweets;
-    HashMap<Integer, Set<Integer>> following;
+    // HashMap<Integer, List<int[]>> tweets;
+    // HashMap<Integer, Set<Integer>> following;
+    List<int[]>[] tweets;
+    Set<Integer>[] following;
     private int time;
 
     public Twitter() {
-        tweets = new HashMap<>();
-        following = new HashMap<>();
+        // tweets = new HashMap<>();
+        // following = new HashMap<>();
+        tweets = new List[500];
+        following = new Set[500];
         time = -1;
     }
     
     public void postTweet(int userId, int tweetId) {
-        tweets.computeIfAbsent(userId, k -> {
+        // tweets.computeIfAbsent(userId, k -> {
+        //     follow(userId, userId);
+        //     return new ArrayList<>();
+        // });
+        // tweets.get(userId).add(new int[]{tweetId, ++time});
+        if (tweets[userId] == null) {
             follow(userId, userId);
-            return new ArrayList<>();
-        });
-        tweets.get(userId).add(new int[]{tweetId, ++time});
+            tweets[userId] = new ArrayList<>();
+        }
+        tweets[userId].add(new int[]{tweetId, ++time});
     }
     
     public List<Integer> getNewsFeed(int userId) {
         List<Integer> res = new LinkedList<>();
 
-        if (!following.containsKey(userId)) return res;
+        // if (!following.containsKey(userId)) return res;
+        if (following[userId] == null) return res;
 
         PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]);
-        for (int follweeId : following.get(userId)) {
-            if (!tweets.containsKey(follweeId)) continue;
-            List<int[]> tweetList = tweets.get(follweeId);
+        for (int followeeId : following[userId]) {
+            // if (!tweets.containsKey(follweeId)) continue;
+            if (tweets[followeeId] == null) continue;
+            
+            List<int[]> tweetList = tweets[followeeId];
             for (int i = tweetList.size() - 1; i >= 0; --i) {
                 if (pq.size() == 10 && tweetList.get(i)[1] < pq.peek()[1]) break;
                 pq.offer(tweetList.get(i));
@@ -43,13 +55,19 @@ class Twitter {
     }
     
     public void follow(int followerId, int followeeId) {
-        following.computeIfAbsent(followerId, k -> new HashSet<>());
-        following.get(followerId).add(followeeId);
+        // following.computeIfAbsent(followerId, k -> new HashSet<>());
+        // following.get(followerId).add(followeeId);
+        if (following[followerId] == null) {
+            following[followerId] = new HashSet<>();
+        }
+        following[followerId].add(followeeId);
     }
     
     public void unfollow(int followerId, int followeeId) {
-        following.computeIfAbsent(followerId, k -> new HashSet<>());
-        following.get(followerId).remove(followeeId);
+        if (following[followerId] == null) {
+            following[followerId] = new HashSet<>();
+        }
+        following[followerId].remove(followeeId);
     }
 }
 
