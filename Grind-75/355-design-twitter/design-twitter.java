@@ -1,25 +1,15 @@
 class Twitter {
-
-    // HashMap<Integer, List<int[]>> tweets;
-    // HashMap<Integer, Set<Integer>> following;
     List<int[]>[] tweets;
     Set<Integer>[] following;
     private int time;
 
     public Twitter() {
-        // tweets = new HashMap<>();
-        // following = new HashMap<>();
-        tweets = new List[500];
-        following = new Set[500];
+        tweets = new List[501];
+        following = new Set[501];
         time = -1;
     }
     
     public void postTweet(int userId, int tweetId) {
-        // tweets.computeIfAbsent(userId, k -> {
-        //     follow(userId, userId);
-        //     return new ArrayList<>();
-        // });
-        // tweets.get(userId).add(new int[]{tweetId, ++time});
         if (tweets[userId] == null) {
             follow(userId, userId);
             tweets[userId] = new ArrayList<>();
@@ -30,12 +20,10 @@ class Twitter {
     public List<Integer> getNewsFeed(int userId) {
         List<Integer> res = new LinkedList<>();
 
-        // if (!following.containsKey(userId)) return res;
         if (following[userId] == null) return res;
 
         PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]);
         for (int followeeId : following[userId]) {
-            // if (!tweets.containsKey(follweeId)) continue;
             if (tweets[followeeId] == null) continue;
             
             List<int[]> tweetList = tweets[followeeId];
@@ -55,8 +43,6 @@ class Twitter {
     }
     
     public void follow(int followerId, int followeeId) {
-        // following.computeIfAbsent(followerId, k -> new HashSet<>());
-        // following.get(followerId).add(followeeId);
         if (following[followerId] == null) {
             following[followerId] = new HashSet<>();
         }
