@@ -1,9 +1,10 @@
 class Solution {
+    private int[][] dirs = new int[][]{{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
     public boolean exist(char[][] board, String word) {
-        boolean[][] dp = new boolean[board.length][board[0].length];
-        for (int r = 0; r < board.length; r++) {
-            for (int c = 0; c < board[0].length; c++) {
-                if (search(board, word, 0, dp, new boolean[board.length][board[0].length], r, c)) {
+        for (int r = 0; r < board.length; ++r) {
+            for (int c = 0; c < board[r].length; ++c) {
+                if (helper(board, word.toCharArray(), 0, r, c, new boolean[board.length][board[0].length])) {
                     return true;
                 }
             }
@@ -11,18 +12,26 @@ class Solution {
         return false;
     }
 
-    private boolean search(char[][] board, String word, int index, boolean[][] dp, boolean[][] vis, int r, int c) {
-        if (index == word.length()) return true;
-        if (r < 0 || r >= board.length || c < 0 || c >= board[0].length) return false;
-        if (vis[r][c]) return false;
-        if (word.charAt(index) != board[r][c]) return false;
-        vis[r][c] = true;
-        if (dp[r][c]) return true;
-        dp[r][c] = search(board, word, index + 1, dp, vis, r + 1, c)
-            || search(board, word, index + 1, dp, vis, r - 1, c)
-            || search(board, word, index + 1, dp, vis, r, c + 1)
-            || search(board, word, index + 1, dp, vis, r, c - 1);
-        vis[r][c] = false;
-        return dp[r][c];
+    private boolean helper(char[][] board, char[] word, int index, int row, int col, boolean[][] vis) {
+        if (index == word.length) return true;
+
+        if (vis[row][col]) return false;
+        if (board[row][col] != word[index]) return false;
+
+        vis[row][col] = true;
+
+        for (int[] dir : dirs) {
+            int r = row + dir[0];
+            int c = col + dir[1];
+
+            if (r < 0 || r >= board.length || c < 0 || c >= board[r].length) continue;
+            // if (board[r][c] != word[index]) continue;
+
+            if (helper(board, word, index + 1, r, c, vis)) {
+                return true;
+            }
+        }
+        vis[row][col] = false;
+        return index == word.length - 1;
     }
 }
