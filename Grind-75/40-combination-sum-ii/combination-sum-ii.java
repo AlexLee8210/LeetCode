@@ -12,12 +12,9 @@ class Solution {
             return;
         }
 
-        if (index == nums.length || target < 0) {
-            return;
-        }
-
         for (int i = index; i < nums.length; ++i) {
             if (i > index && nums[i] == nums[i - 1]) continue;
+            if (nums[i] > target) break;
             cur.add(nums[i]);
             helper(nums, i + 1, target - nums[i], cur, res);
             cur.remove(cur.size() - 1);
