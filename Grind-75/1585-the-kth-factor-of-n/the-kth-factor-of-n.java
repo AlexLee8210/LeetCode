@@ -2,8 +2,6 @@ class Solution {
     public int kthFactor(int n, int k) {
         int top = (int) Math.floor(Math.sqrt(n));
         ArrayList<Integer> factors = new ArrayList<Integer>(Arrays.asList(1));
-        // int factor = 1;
-        // int index = 1;
 
         for (int i = 2; i <= top; ++i) {
             if (n % i == 0) {
