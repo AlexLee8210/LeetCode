@@ -5,7 +5,8 @@ class Solution {
         for (char c : s.toCharArray()) {
             if (set.contains(c)) {
                 ++num;
-                set = new HashSet<>();
+                // set = new HashSet<>();
+                set.clear();
             }
             set.add(c);
         }
