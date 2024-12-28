@@ -9,8 +9,6 @@
  */
 class Solution {
 
-    HashMap<TreeNode, Boolean> containsNode = new HashMap<>();
-
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode[] nodes) {
         Set<TreeNode> set = new HashSet<>();
         for (TreeNode node : nodes) {
