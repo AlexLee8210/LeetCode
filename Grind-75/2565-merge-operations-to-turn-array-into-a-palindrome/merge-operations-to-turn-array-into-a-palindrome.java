@@ -1,25 +1,19 @@
 class Solution {
     public int minimumOperations(int[] nums) {
-        Deque<Integer> dq = new LinkedList<>();
+        int l = 0, r = nums.length - 1;
         int ops = 0;
-
-        for (int n : nums) {
-            dq.addLast(n);
-        }
-
-        while (dq.size() > 1) {
-            int left = dq.removeFirst(), right = dq.removeLast();
-            while (!dq.isEmpty() && left != right) {
-                ++ops;
+        while (l < r) {
+            int left = nums[l++];
+            int right = nums[r--];
+            while (l <= r && left != right) {
                 if (left < right) {
-                    left += dq.removeFirst();
+                    left += nums[l++];
                 } else {
-                    right += dq.removeLast();
+                    right += nums[r--];
                 }
-            }
-            if (dq.isEmpty() && left != right) {
                 ++ops;
             }
+            if (left != right) ++ops;
         }
 
         return ops;
