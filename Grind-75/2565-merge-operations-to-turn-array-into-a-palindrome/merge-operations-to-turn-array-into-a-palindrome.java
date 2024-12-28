@@ -8,14 +8,6 @@ class Solution {
         }
 
         while (dq.size() > 1) {
-            // if (dq.getFirst() == dq.getLast()) {
-            //     dq.removeFirst();
-            //     dq.removeLast();
-            //     continue;
-            // }
-
-            // 
-            // left: 7, right: 5
             int left = dq.removeFirst(), right = dq.removeLast();
             while (!dq.isEmpty() && left != right) {
                 ++ops;
