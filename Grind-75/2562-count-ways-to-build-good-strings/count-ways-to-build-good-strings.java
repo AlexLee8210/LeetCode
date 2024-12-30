@@ -22,27 +22,4 @@ class Solution {
 
         return res;
     }
-
-    // public int countGoodStrings(int low, int high, int zero, int one) {
-    //     int res = 0;
-    //     int[] memo = new int[high + 1];
-
-    //     for (int i = low; i <= high; ++i) {
-    //         res = (res + count(i, zero, one, memo)) % 1000000007;
-    //     }
-
-    //     return res;
-    // }
-
-    // private int count(int n, int zero, int one, int[] memo) {
-    //     if (n == 0) return 1;
-
-    //     if (memo[n] != 0) return memo[n];
-
-    //     int zeroCount = zero <= n ? count(n - zero, zero, one, memo) : 0;
-    //     int oneCount = one <= n ? count(n - one, zero, one, memo) : 0;
-
-    //     memo[n] = (zeroCount + oneCount) % 1000000007;
-    //     return memo[n];
-    // }
 }
