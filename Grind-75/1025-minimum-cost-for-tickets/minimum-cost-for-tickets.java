@@ -25,13 +25,6 @@ class Solution {
         return min;
     }
 
-    // private int bs(int[] arr, int target, int start) {
-    //     for (int i = start; i < arr.length; ++i) {
-    //         if (arr[i] >= target) return i;
-    //     }
-    //     return Integer.MAX_VALUE;
-    // }
-
     private int bs(int[] arr, int target) {
         int l = 0, r = arr.length - 1;
         if (target > arr[r]) return Integer.MAX_VALUE;
