@@ -13,24 +13,24 @@ class Solution {
         int count = 0;
         int[] freq = new int[10];
         Set<String> seen = new HashSet<>();
+        
+        StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < n - 1; ++i) {
             ++freq[s.charAt(i) - '0'];
+            sb.append(s.charAt(i));
         }
 
-        // if (valid(freq)) {
-        //     seen.add(s.substring(0, n));
-        //     ++count;
-        // }
-        for (int i = 0; i <= s.length() - n; ++i) {
-            ++freq[s.charAt(i + n - 1) - '0'];
-            if (!seen.contains(s.substring(i, i + n)) && valid(freq)) {
-                seen.add(s.substring(i, i + n));
+        for (int i = n - 1; i < s.length(); ++i) {
+            ++freq[s.charAt(i) - '0'];
+            sb.append(s.charAt(i));
+            if (!seen.contains(sb.toString()) && valid(freq)) {
+                seen.add(sb.toString());
                 ++count;
             }
-            --freq[s.charAt(i) - '0'];
+            --freq[s.charAt(i - n + 1) - '0'];
+            sb.deleteCharAt(0);
         }
-
         return count;
     }
 
