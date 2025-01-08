@@ -69,7 +69,7 @@ class Solution {
             if (n == 0) n = i;
             else return false;
         }
-        System.out.println(Arrays.toString(freq));
+        // System.out.println(Arrays.toString(freq));
         return true;
     }
 }
