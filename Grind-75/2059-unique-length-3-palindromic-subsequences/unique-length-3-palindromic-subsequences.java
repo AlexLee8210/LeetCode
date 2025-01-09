@@ -18,13 +18,14 @@ class Solution {
 
         for (int[] arr : pos) {
             if (arr == null || arr[1] <= arr[0] + 1) continue;
-            Set<Character> vis = new HashSet<>();
+            // Set<Character> vis = new HashSet<>();
+            boolean[] vis = new boolean[26];
             int start = arr[0];
             int end = arr[1];
 
             for (int i = start + 1; i < end; ++i) {
-                if (!vis.contains(s.charAt(i))) ++count;
-                vis.add(s.charAt(i));
+                if (!vis[s.charAt(i) - 'a']) ++count;
+                vis[s.charAt(i) - 'a'] = true;
             }
             // count += prefix[end] - prefix[start + 1] + 1;
         }
