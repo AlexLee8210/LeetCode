@@ -12,14 +12,10 @@ class Solution {
                 if (r == 0 && c == 0) continue;
                 if (r == 0) dp[r][c] = dp[r][c - 1];
                 else if (c == 0) dp[r][c] = dp[r - 1][c];
-                else {
-                    dp[r][c] = dp[r - 1][c] + dp[r][c - 1];
-                }
+                else dp[r][c] = dp[r - 1][c] + dp[r][c - 1];
             }
         }
-        for (int[] row : dp) {
-            System.out.println(Arrays.toString(row));
-        }
+
         return dp[m - 1][n - 1];
     }
 }
