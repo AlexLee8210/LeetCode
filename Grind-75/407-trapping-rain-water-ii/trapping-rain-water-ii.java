@@ -14,6 +14,9 @@ class Solution {
     }
 
     public int trapRainWater(int[][] heightMap) {
+        if (heightMap == null || heightMap.length < 3 || heightMap[0].length < 3) {
+            return 0;
+        }
         int[][] dirs = new int[][]{{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
         int m = heightMap.length;
         int n = heightMap[0].length;
