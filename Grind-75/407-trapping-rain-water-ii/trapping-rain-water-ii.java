@@ -53,9 +53,7 @@ class Solution {
                 vis[newRow][newCol] = true;
                 pq.add(new Node(newRow, newCol, Math.max(cur.height, heightMap[newRow][newCol])));
 
-                if (heightMap[newRow][newCol] < cur.height) {
-                    total += cur.height - heightMap[newRow][newCol];
-                }
+                total += Math.max(0, cur.height - heightMap[newRow][newCol]);
             }
         }
 
