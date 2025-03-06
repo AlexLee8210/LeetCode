@@ -31,15 +31,15 @@ class Solution {
         for (int c = 0; c < n; ++c) {
             vis[0][c] = true;
             vis[m - 1][c] = true;
-            pq.add(new Node(0, c, heightMap[0][c]));
-            pq.add(new Node(m - 1, c, heightMap[m - 1][c]));
+            pq.offer(new Node(0, c, heightMap[0][c]));
+            pq.offer(new Node(m - 1, c, heightMap[m - 1][c]));
         }
 
         for (int r = 0; r < m; ++r) {
             vis[r][0] = true;
             vis[r][n - 1] = true;
-            pq.add(new Node(r, 0, heightMap[r][0]));
-            pq.add(new Node(r, n - 1, heightMap[r][n - 1]));
+            pq.offer(new Node(r, 0, heightMap[r][0]));
+            pq.offer(new Node(r, n - 1, heightMap[r][n - 1]));
         }
 
         while (!pq.isEmpty()) {
@@ -51,7 +51,7 @@ class Solution {
                 if (!inBounds(newRow, newCol, m, n) || vis[newRow][newCol]) continue;
 
                 vis[newRow][newCol] = true;
-                pq.add(new Node(newRow, newCol, Math.max(cur.height, heightMap[newRow][newCol])));
+                pq.offer(new Node(newRow, newCol, Math.max(cur.height, heightMap[newRow][newCol])));
 
                 total += Math.max(0, cur.height - heightMap[newRow][newCol]);
             }
