@@ -43,21 +43,18 @@ class Solution {
         }
 
         while (!pq.isEmpty()) {
-            Node pos = pq.poll();
-            int r = pos.row;
-            int c = pos.col;
-            int level = pos.height;
+            Node cur = pq.poll();
             for (int[] dir : dirs) {
-                int newRow = r + dir[0];
-                int newCol = c + dir[1];
+                int newRow = cur.row + dir[0];
+                int newCol = cur.col + dir[1];
 
                 if (!inBounds(newRow, newCol, m, n) || vis[newRow][newCol]) continue;
 
                 vis[newRow][newCol] = true;
-                pq.add(new Node(newRow, newCol, Math.max(level, heightMap[newRow][newCol])));
+                pq.add(new Node(newRow, newCol, Math.max(cur.height, heightMap[newRow][newCol])));
 
-                if (heightMap[newRow][newCol] < level) {
-                    total += level - heightMap[newRow][newCol];
+                if (heightMap[newRow][newCol] < cur.height) {
+                    total += cur.height - heightMap[newRow][newCol];
                 }
             }
         }
