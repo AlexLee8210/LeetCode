@@ -25,7 +25,7 @@ class Solution {
 
         boolean[][] vis = new boolean[m][n];
         PriorityQueue<Node> pq = new PriorityQueue<>((Node a, Node b) -> {
-            return heightMap[a.row][a.col] - heightMap[b.row][b.col];
+            return a.height - b.height;
         });
 
         for (int c = 0; c < n; ++c) {
