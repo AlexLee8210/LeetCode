@@ -1,68 +1,75 @@
 class LRUCache {
 
-    private class Node {
-        int key;
-        int value;
-        Node next, prev;
+    private class DLNode {
+        public DLNode prev;
+        public DLNode next;
+        public int val;
 
-        public Node(int key, int value) {
-            this.key = key;
-            this.value = value;
+        public DLNode(int val) {
+            this.val = val;
         }
     }
 
-    private int cap;
-    private HashMap<Integer, Node> map;
-
-    private Node head, tail;
-
-    private void add(Node n) {
-        n.prev = tail.prev;
-        n.next = tail;
-        tail.prev.next = n;
-        tail.prev = n;
-    }
-
-    private void remove(Node n) {
-        n.prev.next = n.next;
-        n.next.prev = n.prev;
-    }
+    HashMap<Integer, Integer> cache;
+    HashMap<Integer, DLNode> nodeMap;
+    DLNode head, tail;
+    int capacity;
 
     public LRUCache(int capacity) {
-        map = new HashMap<>();
-        cap = capacity;
-        head = new Node(0, 0);
-        tail = new Node(0, 0);
+        this.capacity = capacity;
+        cache = new HashMap<>(capacity + 1);
+        nodeMap = new HashMap<>(capacity + 1);
+        head = new DLNode(0);
+        tail = new DLNode(0);
         head.next = tail;
         tail.prev = head;
     }
     
     public int get(int key) {
-        if (!map.containsKey(key)) {
-            return -1;
-        }
+        if (!cache.containsKey(key)) return -1;
 
-        Node node = map.get(key);
-        remove(node);
-        add(node);
-        return node.value;
+        if (nodeMap.containsKey(key)) {
+            remove(nodeMap.get(key));
+        }
+        DLNode nodeToAdd = new DLNode(key);
+        add(nodeToAdd);
+
+        return cache.get(key);
     }
     
     public void put(int key, int value) {
-        if (map.containsKey(key)) {
-            Node n = map.get(key);
-            remove(n);
-            n.value = value;
-            add(n);
-        } else {
-            if (map.size() == cap) {
-                Node n = head.next;
-                remove(n);
-                map.remove(n.key);
-            }
-            Node n = new Node(key, value);
-            add(n);
-            map.put(key, n);
+        if (nodeMap.containsKey(key)) {
+            remove(nodeMap.get(key));
+        }
+        cache.put(key, value);
+        DLNode nodeToAdd = new DLNode(key);
+        add(nodeToAdd);
+
+        if (cache.size() > capacity) {
+            cache.remove(head.next.val);
+            nodeMap.remove(head.next.val);
+            remove(head.next);
         }
     }
+
+    private void remove(DLNode nodeToRemove) {
+        nodeToRemove.prev.next = nodeToRemove.next;
+        nodeToRemove.next.prev = nodeToRemove.prev;
+    }
+
+    private void add(DLNode nodeToAdd) {
+        nodeToAdd.prev = tail.prev;
+        nodeToAdd.next = tail;
+        tail.prev.next = nodeToAdd;
+        tail.prev = nodeToAdd;
+
+        nodeMap.put(nodeToAdd.val, nodeToAdd);
+    }
 }
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
