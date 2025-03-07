@@ -11,7 +11,7 @@ class Solution {
             requisites[prereq[1]].add(prereq[0]);
         }
 
-        Deque<Integer> dq = new LinkedList<>();
+        Queue<Integer> dq = new LinkedList<>();
 
         for (int i = 0; i < numCourses; ++i) {
             if (indegree[i] == 0) dq.offer(i);
