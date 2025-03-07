@@ -1,34 +1,33 @@
 class Solution {
     public int[] findOrder(int numCourses, int[][] prerequisites) {
-        ArrayList<Integer>[] adj = new ArrayList[numCourses];
         int[] indegree = new int[numCourses];
-        for (int[] course : prerequisites) {
-            if (adj[course[1]] == null) {
-                adj[course[1]] = new ArrayList<>();
-            }
-            adj[course[1]].add(course[0]);
-            indegree[course[0]]++;
-        }
-        Queue<Integer> q = new LinkedList<>();
-        for (int i = 0; i < numCourses; i++) {
-            if (indegree[i] == 0) {
-                q.offer(i);
-            }
-        }
+        ArrayList<Integer>[] requisites = new ArrayList[numCourses];
         int[] res = new int[numCourses];
         int index = 0;
-        while (!q.isEmpty()) {
-            int course = q.poll();
-            res[index++] = course;
-            if (adj[course] == null) continue;
-            for (int pre : adj[course]) {
-                indegree[pre]--;
-                if (indegree[pre] == 0) {
-                    q.offer(pre);
-                }
+
+        for (int[] prereq : prerequisites) {
+            ++indegree[prereq[0]];
+            if (requisites[prereq[1]] == null) {
+                requisites[prereq[1]] = new ArrayList<>();
+            }
+            requisites[prereq[1]].add(prereq[0]);
+        }
+    
+        Deque<Integer> dq = new LinkedList<>();
+        for (int i = 0; i < indegree.length; ++i) {
+            if (indegree[i] == 0) dq.offer(i);
+        }
+
+        while (!dq.isEmpty()) {
+            int course = dq.poll();
+            res[index] = course;
+            ++index;
+            if (requisites[course] == null) continue;
+            for (int postreq : requisites[course]) {
+                if (--indegree[postreq] == 0) dq.offer(postreq);
             }
         }
-        if (index != numCourses) return new int[]{};
-        return res;
+
+        return index == numCourses ? res : new int[0];
     }
 }
