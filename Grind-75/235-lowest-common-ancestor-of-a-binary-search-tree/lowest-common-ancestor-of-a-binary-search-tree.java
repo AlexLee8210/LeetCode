@@ -10,21 +10,19 @@
 
 class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        return lcaHelper(root, p, q);
-    }
+        if (root == null) return root;
+        if (root.equals(p) || root.equals(q)) return root;
 
-    private TreeNode lcaHelper(TreeNode node, TreeNode p, TreeNode q) {
-        if (q.val < p.val) {
-            TreeNode temp = p;
-            p = q;
-            q = temp;
+        if (p.val < root.val && q.val < root.val) {
+            return lowestCommonAncestor(root.left, p, q);
+        } else if (p.val > root.val && q.val > root.val) {
+            return lowestCommonAncestor(root.right, p, q);
         }
-        if (node.val >= p.val && node.val <= q.val) {
-            return node;
-        } else if (node.val >= p.val) {
-            return lowestCommonAncestor(node.left, p, q);
-        } else {
-            return lowestCommonAncestor(node.right, p, q);
-        }
+
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+
+        if (left != null && right != null) return root;
+        return left == null ? right : left;
     }
 }
