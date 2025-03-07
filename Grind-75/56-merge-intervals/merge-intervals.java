@@ -1,17 +1,26 @@
 class Solution {
     public int[][] merge(int[][] intervals) {
-        ArrayList<int[]> list = new ArrayList<>();
         Arrays.sort(intervals, (int[] a, int[] b) -> a[0] - b[0]);
-        int[] prev = intervals[0];
-        for (int i = 1; i < intervals.length; i++) {
-            if (intervals[i][0] <= prev[1]) {
-                prev[1] = Math.max(intervals[i][1], prev[1]);
+
+        Deque<int[]> merged = new LinkedList<>();
+        merged.addLast(intervals[0]);
+        for (int i = 1; i < intervals.length; ++i) {
+            if (merged.getLast()[1] >= intervals[i][0]) {
+                int[] top = merged.getLast();
+                top[1] = Math.max(top[1], intervals[i][1]);
             } else {
-                list.add(prev);
-                prev = intervals[i];
+                merged.addLast(intervals[i]);
             }
         }
-        list.add(prev);
-        return list.toArray(new int[list.size()][]);
+
+        int[][] res = new int[merged.size()][2];
+
+        int index = 0;
+        while (!merged.isEmpty()) {
+            res[index] = merged.removeFirst();
+            ++index;
+        }
+
+        return res;
     }
 }
