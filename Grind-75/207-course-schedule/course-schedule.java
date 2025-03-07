@@ -6,12 +6,12 @@ class Solution {
         for (int[] prereq : prerequisites) {
             ++indegree[prereq[0]];
             if (requisites[prereq[1]] == null) {
-                requisites[prereq[1]] = new ArrayList<>(numCourses);
+                requisites[prereq[1]] = new ArrayList<>();
             }
             requisites[prereq[1]].add(prereq[0]);
         }
 
-        Queue<Integer> dq = new LinkedList<>();
+        Deque<Integer> dq = new LinkedList<>();
 
         for (int i = 0; i < numCourses; ++i) {
             if (indegree[i] == 0) dq.offer(i);
