@@ -1,28 +1,47 @@
 class Solution {
+    private int[][] dirs = new int[][]{{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
     public int numIslands(char[][] grid) {
-        int num = 0;
-        for (int r = 0; r < grid.length; r++) {
-            for (int c = 0; c < grid[0].length; c++) {
-                if (grid[r][c] == '0') continue;
-                traverse(grid, r, c);
-                num++;
+        int m = grid.length;
+        int n = grid[0].length;
+        boolean[][] vis = new boolean[m][n];
+        int count = 0;
+
+        for (int r = 0; r < m; ++r) {
+            for (int c = 0; c < n; ++c) {
+                if (grid[r][c] == '1' && !vis[r][c]) {
+                    ++count;
+                    bfs(grid, r, c, vis);
+                }
             }
         }
-        return num;
+
+        return count;
     }
 
-    private void traverse(char[][] grid, int row, int col) {
-        if (!isValid(grid.length, grid[0].length, row, col)) return;
-        if (grid[row][col] == '0') return;
-        grid[row][col] = '0';
-        traverse(grid, row - 1, col);
-        traverse(grid, row + 1, col);
-        traverse(grid, row, col - 1);
-        traverse(grid, row, col + 1);
-        return;
+    private void bfs(char[][] grid, int r, int c, boolean[][] vis) {
+        int m = grid.length;
+        int n = grid[0].length;
+
+        Queue<Pair<Integer, Integer>> q = new LinkedList<>();
+        q.add(new Pair<>(r, c));
+        
+        while (!q.isEmpty()) {
+            Pair<Integer, Integer> pos = q.poll();
+
+            for (int[] dir : dirs) {
+                int newR = pos.getKey() + dir[0];
+                int newC = pos.getValue() + dir[1];
+                
+                if (!inBounds(newR, newC, m, n) || grid[newR][newC] == '0' || vis[newR][newC]) continue;
+                vis[newR][newC] = true;
+
+                q.offer(new Pair<>(newR, newC));
+            }
+        }
     }
 
-    private boolean isValid(int m, int n, int r, int c) {
+    private boolean inBounds(int r, int c, int m, int n) {
         return 0 <= r && r < m && 0 <= c && c < n;
     }
 }
