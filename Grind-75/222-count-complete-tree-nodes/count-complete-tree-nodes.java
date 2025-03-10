@@ -14,26 +14,24 @@
  * }
  */
 class Solution {
+    private int height(TreeNode node) {
+        int height = -1;
+        while (node != null) {
+            ++height;
+            node = node.left;
+        }
+        return height;
+    }
+
     public int countNodes(TreeNode root) {
-        Deque<TreeNode> dq = new LinkedList<>();
         if (root == null) return 0;
+        int leftHeight = height(root.left);
+        int rightHeight = height(root.right);
 
-        int nodes = 0;
-        int nodesInLevel = 1;
-        dq.offer(root);
-        while (!dq.isEmpty()) {
-            int size = dq.size();
-            if (nodesInLevel != size) return nodes + size;
-            for (int i = 0; i < size; ++i) {
-                TreeNode node = dq.poll();
-                if (node.left != null) dq.offer(node.left);
-                if (node.right != null) dq.offer(node.right);
-            }
-
-            nodes += nodesInLevel;
-            nodesInLevel *= 2;
+        if (leftHeight == rightHeight) {
+            return (1 << (leftHeight + 1)) + countNodes(root.right);
         }
 
-        return nodes;
+        return (1 << (rightHeight + 1)) + countNodes(root.left);
     }
 }
