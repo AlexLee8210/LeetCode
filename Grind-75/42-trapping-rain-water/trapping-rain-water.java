@@ -6,12 +6,10 @@ class Solution {
 
         while (l < r) {
             if (maxLeft <= maxRight) {
-                ++l;
-                maxLeft = Math.max(maxLeft, height[l]);
+                maxLeft = Math.max(height[++l], maxLeft);
                 total += maxLeft - height[l];
             } else {
-                --r;
-                maxRight = Math.max(maxRight, height[r]);
+                maxRight = Math.max(height[--r], maxRight);
                 total += maxRight - height[r];
             }
         }
