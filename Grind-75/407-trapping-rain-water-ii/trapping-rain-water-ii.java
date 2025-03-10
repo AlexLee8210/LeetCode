@@ -1,56 +1,49 @@
 class Solution {
-    private class Cell {
-        int height;
-        int row, col;
-
-        public Cell(int row, int col, int height) {
-            this.row = row;
-            this.col = col;
-            this.height = height;
-        }
-    }
-
     public int trapRainWater(int[][] heightMap) {
         int m = heightMap.length;
         int n = heightMap[0].length;
 
         int[][] dirs = new int[][]{{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
 
-        PriorityQueue<Cell> pq = new PriorityQueue<>((Cell a, Cell b) -> a.height - b.height);
+        boolean[][] vis = new boolean[m][n];
+        PriorityQueue<int[]> pq = new PriorityQueue<>((int[] a, int[] b) -> heightMap[a[0]][a[1]] - heightMap[b[0]][b[1]]);
 
         int total = 0;
 
         for (int r = 0; r < m; ++r) {
-            pq.offer(new Cell(r, 0, heightMap[r][0]));
-            pq.offer(new Cell(r, n - 1, heightMap[r][n - 1]));
+            pq.offer(new int[]{r, 0});
+            pq.offer(new int[]{r, n - 1});
+            vis[r][0] = true;
+            vis[r][n - 1] = true;
         }
         for (int c = 1; c < n - 1; ++c) {
-            pq.offer(new Cell(0, c, heightMap[0][c]));
-            pq.offer(new Cell(m - 1, c, heightMap[m - 1][c]));
+            pq.offer(new int[]{0, c});
+            pq.offer(new int[]{m - 1, c});
+            vis[0][c] = true;
+            vis[m - 1][c] = true;
         }
 
-        boolean[][] vis = new boolean[m][n];
         int height = 0;
 
         while(!pq.isEmpty()) {
-            Cell cell = pq.poll();
-            if (vis[cell.row][cell.col]) continue;
-            vis[cell.row][cell.col] = true;
+            int[] cell = pq.poll();
             
-            if (height < heightMap[cell.row][cell.col]) {
-                height = heightMap[cell.row][cell.col];
+            if (height < heightMap[cell[0]][cell[1]]) {
+                height = heightMap[cell[0]][cell[1]];
             } else {
-                total += height - heightMap[cell.row][cell.col];
-                cell.height = height;
+                total += height - heightMap[cell[0]][cell[1]];
+                heightMap[cell[0]][cell[1]] = height;
             }
 
             for (int[] dir : dirs) {
-                int nextRow = cell.row + dir[0];
-                int nextCol = cell.col + dir[1];
+                int nextRow = cell[0] + dir[0];
+                int nextCol = cell[1] + dir[1];
 
                 if (!inBounds(nextRow, nextCol, m, n)) continue;
+                if (vis[nextRow][nextCol]) continue;
+                vis[nextRow][nextCol] = true;
 
-                pq.offer(new Cell(nextRow, nextCol, heightMap[nextRow][nextCol]));
+                pq.offer(new int[]{nextRow, nextCol});
             }
         }
 
