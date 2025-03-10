@@ -1,34 +1,46 @@
 class LRUCache {
 
-    private class DLNode {
-        public DLNode prev;
-        public DLNode next;
-        public int key;
-        public int value;
+    private class Node {
+        int key, value;
+        Node prev, next;
 
-        public DLNode(int key, int value) {
+        public Node(int key, int value) {
             this.key = key;
             this.value = value;
         }
     }
 
-    HashMap<Integer, DLNode> cache;
-    DLNode head, tail;
+    Node head, tail;
+
+    private void add(Node node) {
+        node.prev = tail.prev;
+        node.next = tail;
+        tail.prev.next = node;
+        tail.prev = node;
+    }
+
+    private void remove(Node node) {
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+    }
+
+    HashMap<Integer, Node> cache;
     int capacity;
 
     public LRUCache(int capacity) {
-        this.capacity = capacity;
-        cache = new HashMap<>(capacity);
-        head = new DLNode(0, 0);
-        tail = new DLNode(0, 0);
+        head = new Node(0, 0);
+        tail = new Node(0, 0);
         head.next = tail;
         tail.prev = head;
+
+        this.capacity = capacity;
+        cache = new HashMap<>(capacity);
     }
     
     public int get(int key) {
         if (!cache.containsKey(key)) return -1;
 
-        DLNode node = cache.get(key);
+        Node node = cache.get(key);
         remove(node);
         add(node);
 
@@ -37,33 +49,24 @@ class LRUCache {
     
     public void put(int key, int value) {
         if (cache.containsKey(key)) {
-            DLNode node = cache.get(key);
+            Node node = cache.get(key);
             remove(node);
             add(node);
             node.value = value;
+
             return;
         }
 
-        DLNode node = new DLNode(key, value);
+        // new k,v pair
         if (cache.size() == capacity) {
-            cache.remove(head.next.key);
-            remove(head.next);
+            Node lruNode = head.next;
+            cache.remove(lruNode.key);
+            remove(lruNode);
         }
 
+        Node node = new Node(key, value);
         add(node);
         cache.put(key, node);
-    }
-
-    private void remove(DLNode node) {
-        node.prev.next = node.next;
-        node.next.prev = node.prev;
-    }
-
-    private void add(DLNode node) {
-        node.prev = tail.prev;
-        node.next = tail;
-        tail.prev.next = node;
-        tail.prev = node;
     }
 }
 
