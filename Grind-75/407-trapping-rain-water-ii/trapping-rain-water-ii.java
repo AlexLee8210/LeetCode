@@ -23,7 +23,6 @@ class Solution {
 
         while(!pq.isEmpty()) {
             int[] cell = pq.poll();
-            if (vis[cell[0]][cell[1]]) continue;
             vis[cell[0]][cell[1]] = true;
             
             if (height < heightMap[cell[0]][cell[1]]) {
@@ -38,6 +37,7 @@ class Solution {
                 int nextCol = cell[1] + dir[1];
 
                 if (!inBounds(nextRow, nextCol, m, n)) continue;
+                if (vis[nextRow][nextCol]) continue;
 
                 pq.offer(new int[]{nextRow, nextCol});
             }
