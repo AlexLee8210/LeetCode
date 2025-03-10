@@ -4,14 +4,13 @@ class Solution {
     public int numIslands(char[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
-        boolean[][] vis = new boolean[m][n];
         int count = 0;
 
         for (int r = 0; r < m; ++r) {
             for (int c = 0; c < n; ++c) {
-                if (grid[r][c] == '1' && !vis[r][c]) {
+                if (grid[r][c] == '1') {
                     ++count;
-                    bfs(grid, r, c, vis);
+                    bfs(grid, r, c);
                 }
             }
         }
@@ -19,9 +18,10 @@ class Solution {
         return count;
     }
 
-    private void bfs(char[][] grid, int r, int c, boolean[][] vis) {
+    private void bfs(char[][] grid, int r, int c) {
         int m = grid.length;
         int n = grid[0].length;
+        grid[r][c] = '0';
 
         Queue<Pair<Integer, Integer>> q = new LinkedList<>();
         q.add(new Pair<>(r, c));
@@ -33,8 +33,8 @@ class Solution {
                 int newR = pos.getKey() + dir[0];
                 int newC = pos.getValue() + dir[1];
                 
-                if (!inBounds(newR, newC, m, n) || grid[newR][newC] == '0' || vis[newR][newC]) continue;
-                vis[newR][newC] = true;
+                if (!inBounds(newR, newC, m, n) || grid[newR][newC] == '0') continue;
+                grid[newR][newC] = '0';
 
                 q.offer(new Pair<>(newR, newC));
             }
