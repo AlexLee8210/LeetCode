@@ -1,22 +1,24 @@
 class Solution {
     public int[][] insert(int[][] intervals, int[] newInterval) {
         ArrayList<int[]> res = new ArrayList<>();
-        int index = 0;
-        // before insert
-        while (index < intervals.length && newInterval[0] > intervals[index][1]) {
-            res.add(intervals[index++]);
+        int idx = 0;
+         
+        while (idx < intervals.length && intervals[idx][1] < newInterval[0]) {
+            res.add(intervals[idx++]);
         }
-        // merge insert
-        while (index < intervals.length && newInterval[1] >= intervals[index][0]) {
-            newInterval[0] = Math.min(intervals[index][0], newInterval[0]);
-            newInterval[1] = Math.max(intervals[index][1], newInterval[1]);
-            index++;
+
+        // newInterval[0] = Math.min(intervals[idx][0], newInterval[0]);
+        while (idx < intervals.length && intervals[idx][1] >= newInterval[0] && newInterval[1] >= intervals[idx][0]) {
+            newInterval[0] = Math.min(intervals[idx][0], newInterval[0]);
+            newInterval[1] = Math.max(intervals[idx++][1], newInterval[1]);
         }
+
         res.add(newInterval);
-        // after insert
-        while (index < intervals.length) {
-            res.add(intervals[index++]);
+         
+        while (idx < intervals.length) {
+            res.add(intervals[idx++]);
         }
-        return res.toArray(new int[res.size()][]);
+
+        return res.toArray(new int[res.size()][2]);
     }
 }
