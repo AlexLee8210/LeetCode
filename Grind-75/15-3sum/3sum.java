@@ -1,22 +1,27 @@
 class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
-        Set<List<Integer>> trips = new HashSet<>();
-        for (int i = 0; i < nums.length - 2; ++i) {
-            HashMap<Integer, Integer> map = new HashMap<>();
-            for (int j = i + 1; j < nums.length; ++j) {
-                int numK = - (nums[i] + nums[j]);
-                if (map.containsKey(numK)) {
-                    ArrayList<Integer> list = new ArrayList<>();
-                    list.add(nums[i]);
-                    list.add(nums[j]);
-                    list.add(numK);
-                    Collections.sort(list);
-                    trips.add(list);
+        Arrays.sort(nums);
+        List<List<Integer>> res = new ArrayList<>();
+        for (int i = 0; i < nums.length; ++i) {
+            if (i > 0 && nums[i] == nums[i - 1]) continue;
+            int target = -nums[i];
+            int l = i + 1, r = nums.length - 1;
+            while (l < r) {
+                int sum = nums[l] + nums[r];
+                if (sum > target) {
+                    --r;
+                } else if (sum < target) {
+                    ++l;
+                } else {
+                    res.add(Arrays.asList(nums[i], nums[l], nums[r]));
+                    --r;
+                    do {
+                        ++l;
+                    } while (l < r && nums[l - 1] == nums[l]);
                 }
-                map.put(nums[j], j);
             }
         }
 
-        return new ArrayList<>(trips);
+        return res;
     }
 }
