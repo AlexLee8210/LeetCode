@@ -1,13 +1,13 @@
 class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
         int[] indegree = new int[numCourses];
-        Set<Integer>[] postreq = new Set[numCourses];
+        List<Integer>[] postreq = new List[numCourses];
         for (int[] prerequisite : prerequisites) {
             int a = prerequisite[0];
             int b = prerequisite[1];
             ++indegree[a];
             if (postreq[b] == null) {
-                postreq[b] = new HashSet<>();
+                postreq[b] = new ArrayList<>();
             }
 
             postreq[b].add(a);
