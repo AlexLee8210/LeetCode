@@ -21,19 +21,27 @@ class Node {
 class Solution {
     public Node cloneGraph(Node node) {
         if (node == null) return null;
-        return cloneGraphHelper(node, new HashMap<Integer, Node>());
-    }
+        Node[] nodes = new Node[101];
+        Queue<Node> q = new LinkedList<>();
+        q.offer(node);
 
-    // return clone
-    private Node cloneGraphHelper(Node node, HashMap<Integer, Node> vis) {
-        if (vis.containsKey(node.val)) {
-            return vis.get(node.val);
+        while (!q.isEmpty()) {
+            Node original = q.poll();
+            if (nodes[original.val] == null) {
+                nodes[original.val] = new Node(original.val);
+            }
+            
+            if (!nodes[original.val].neighbors.isEmpty()) continue;
+
+            for (Node neighbor : original.neighbors) {
+                if (nodes[neighbor.val] == null) {
+                    nodes[neighbor.val] = new Node(neighbor.val);
+                }
+                nodes[original.val].neighbors.add(nodes[neighbor.val]);
+                q.offer(neighbor);
+            }
         }
-        Node newNode = new Node(node.val);
-        vis.put(node.val, newNode);
-        for (Node neighbor : node.neighbors) {
-            newNode.neighbors.add(cloneGraphHelper(neighbor, vis));
-        }
-        return newNode;
+
+        return nodes[node.val];
     }
 }
