@@ -1,33 +1,40 @@
 class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
         int[] indegree = new int[numCourses];
-        ArrayList<Integer>[] requisites = new ArrayList[numCourses];
-
-        for (int[] prereq : prerequisites) {
-            ++indegree[prereq[0]];
-            if (requisites[prereq[1]] == null) {
-                requisites[prereq[1]] = new ArrayList<>();
+        Set<Integer>[] postreq = new Set[numCourses];
+        for (int[] prerequisite : prerequisites) {
+            int a = prerequisite[0];
+            int b = prerequisite[1];
+            ++indegree[a];
+            if (postreq[b] == null) {
+                postreq[b] = new HashSet<>();
             }
-            requisites[prereq[1]].add(prereq[0]);
+
+            postreq[b].add(a);
         }
-
-        Deque<Integer> dq = new LinkedList<>();
-
+        
+        Queue<Integer> q = new LinkedList<>();
         for (int i = 0; i < numCourses; ++i) {
-            if (indegree[i] == 0) dq.offer(i);
-        }
-
-        int courses = 0;
-
-        while (!dq.isEmpty()) {
-            int course = dq.poll();
-            ++courses;
-            if (requisites[course] == null) continue;
-            for (int req : requisites[course]) {
-                if (--indegree[req] == 0) dq.offer(req);
+            if (indegree[i] == 0) {
+                q.offer(i);
             }
         }
 
-        return courses == numCourses;
+        while (!q.isEmpty()) {
+            int course = q.poll();
+            if (postreq[course] == null) continue;
+            for (int post : postreq[course]) {
+                --indegree[post];
+                if (indegree[post] == 0) {
+                    q.offer(post);
+                }
+            }
+        }
+
+        for (int ind : indegree) {
+            if (ind > 0) return false;
+        }
+
+        return true;
     }
 }
