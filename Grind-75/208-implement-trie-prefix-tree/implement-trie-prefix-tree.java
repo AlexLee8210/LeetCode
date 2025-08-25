@@ -1,11 +1,19 @@
 class Trie {
 
     private class Node {
-        boolean end;
-        Node[] adj;
+        public Node[] alph;
+        public boolean isEnd;
+
         public Node() {
-            end = false;
-            adj = new Node[26];
+            alph = new Node[26];
+            isEnd = false;
+        }
+
+        public Node insert(char c) {
+            if (alph[c - 'a'] == null) {
+                alph[c - 'a'] = new Node();
+            }
+            return alph[c - 'a'];
         }
     }
 
@@ -18,28 +26,29 @@ class Trie {
     public void insert(String word) {
         Node cur = root;
         for (char c : word.toCharArray()) {
-            if (cur.adj[c - 'a'] == null) cur.adj[c - 'a'] = new Node();
-            cur = cur.adj[c - 'a'];
+            cur = cur.insert(c);
         }
-        cur.end = true;
+        cur.isEnd = true;
     }
     
     public boolean search(String word) {
         Node cur = root;
-        for (char c : word.toCharArray()) {
-            if (cur.adj[c - 'a'] == null) return false;
-            cur = cur.adj[c - 'a'];
+        int idx = 0;
+        while (idx < word.length() && cur != null) {
+            cur = cur.alph[word.charAt(idx) - 'a'];
+            ++idx;
         }
-        return cur.end;
+        return idx == word.length() && cur != null && cur.isEnd;
     }
     
     public boolean startsWith(String prefix) {
         Node cur = root;
-        for (char c : prefix.toCharArray()) {
-            if (cur.adj[c - 'a'] == null) return false;
-            cur = cur.adj[c - 'a'];
+        int idx = 0;
+        while (idx < prefix.length() && cur != null) {
+            cur = cur.alph[prefix.charAt(idx) - 'a'];
+            ++idx;
         }
-        return true;
+        return idx == prefix.length() && cur != null;
     }
 }
 
