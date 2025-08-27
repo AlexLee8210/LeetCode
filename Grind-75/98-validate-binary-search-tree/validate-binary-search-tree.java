@@ -15,15 +15,22 @@
  */
 class Solution {
     public boolean isValidBST(TreeNode root) {
-        long[] prev = new long[]{Long.MIN_VALUE};
-        return inOrder(root, prev);
+        Stack<TreeNode> stack = new Stack<>();
+        inOrder(root, stack);
+        TreeNode prev = stack.pop();
+        boolean valid = true;
+        while(!stack.isEmpty() && valid) {
+            TreeNode cur = stack.pop();
+            valid &= prev.val > cur.val;
+            prev = cur;
+        }
+        return valid;
     }
 
-    private boolean inOrder(TreeNode node, long[] prev) {
-        if (node == null) return true;
-        if (!inOrder(node.left, prev)) return false;
-        if (node.val <= prev[0]) return false;
-        prev[0] = node.val;
-        return inOrder(node.right, prev);
+    private void inOrder(TreeNode root, Stack<TreeNode> stack) {
+        if (root == null) return;
+        inOrder(root.left, stack);
+        stack.push(root);
+        inOrder(root.right, stack);
     }
 }
