@@ -1,18 +1,18 @@
 class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
         int[] indegree = new int[numCourses];
-        List<Integer>[] postreq = new List[numCourses];
-        for (int[] prerequisite : prerequisites) {
-            int a = prerequisite[0];
-            int b = prerequisite[1];
-            ++indegree[a];
-            if (postreq[b] == null) {
-                postreq[b] = new ArrayList<>();
-            }
+        List<Integer>[] reqs = new List[numCourses];
 
-            postreq[b].add(a);
+        for (int[] course : prerequisites) {
+            int pre = course[1];
+            int post = course[0];
+            ++indegree[post];
+            if (reqs[pre] == null) {
+                reqs[pre] = new ArrayList<>();
+            }
+            reqs[pre].add(post);
         }
-        
+
         Queue<Integer> q = new LinkedList<>();
         for (int i = 0; i < numCourses; ++i) {
             if (indegree[i] == 0) {
@@ -20,10 +20,14 @@ class Solution {
             }
         }
 
+        int cnt = 0;
         while (!q.isEmpty()) {
             int course = q.poll();
-            if (postreq[course] == null) continue;
-            for (int post : postreq[course]) {
+            ++cnt;
+            if (reqs[course] == null) {
+                continue;
+            }
+            for (int post : reqs[course]) {
                 --indegree[post];
                 if (indegree[post] == 0) {
                     q.offer(post);
@@ -31,10 +35,6 @@ class Solution {
             }
         }
 
-        for (int ind : indegree) {
-            if (ind > 0) return false;
-        }
-
-        return true;
+        return cnt == numCourses;
     }
 }
