@@ -1,33 +1,41 @@
 class Solution {
     public int[] findOrder(int numCourses, int[][] prerequisites) {
+        int[] order = new int[numCourses];
         int[] indegree = new int[numCourses];
-        ArrayList<Integer>[] requisites = new ArrayList[numCourses];
-        int[] res = new int[numCourses];
-        int index = 0;
+        List<Integer>[] reqs = new List[numCourses];
 
-        for (int[] prereq : prerequisites) {
-            ++indegree[prereq[0]];
-            if (requisites[prereq[1]] == null) {
-                requisites[prereq[1]] = new ArrayList<>();
+        for (int[] course : prerequisites) {
+            int pre = course[1];
+            int post = course[0];
+            ++indegree[post];
+            if (reqs[pre] == null) {
+                reqs[pre] = new ArrayList<>();
             }
-            requisites[prereq[1]].add(prereq[0]);
-        }
-    
-        Deque<Integer> dq = new LinkedList<>();
-        for (int i = 0; i < indegree.length; ++i) {
-            if (indegree[i] == 0) dq.offer(i);
+            reqs[pre].add(post);
         }
 
-        while (!dq.isEmpty()) {
-            int course = dq.poll();
-            res[index] = course;
-            ++index;
-            if (requisites[course] == null) continue;
-            for (int postreq : requisites[course]) {
-                if (--indegree[postreq] == 0) dq.offer(postreq);
+        Queue<Integer> q = new LinkedList<>();
+        for (int i = 0; i < numCourses; ++i) {
+            if (indegree[i] == 0) {
+                q.offer(i);
             }
         }
 
-        return index == numCourses ? res : new int[0];
+        int i = 0;
+        while (!q.isEmpty()) {
+            int course = q.poll();
+            order[i++] = course;
+            if (reqs[course] == null) {
+                continue;
+            }
+            for (int post : reqs[course]) {
+                --indegree[post];
+                if (indegree[post] == 0) {
+                    q.offer(post);
+                }
+            }
+        }
+
+        return i == numCourses ? order : new int[]{};
     }
 }
