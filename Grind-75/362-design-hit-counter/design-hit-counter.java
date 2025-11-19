@@ -1,21 +1,32 @@
 class HitCounter {
-    private static final int WINDOW = 300;
-    private Queue<Integer> hits;
+    private static final int WND = 300;
+    private int[] times;
+    private int[] hits;
 
     public HitCounter() {
-        hits = new LinkedList<>();
+        times = new int[WND];
+        hits = new int[WND];
     }
     
     public void hit(int timestamp) {
-        hits.offer(timestamp);
+        int idx = timestamp % WND;
+        if (times[idx] == timestamp) {
+            ++hits[idx];
+        } else {
+            hits[idx] = 1;
+            times[idx] = timestamp;
+        }
     }
     
     public int getHits(int timestamp) {
-        while (!hits.isEmpty() && hits.peek() <= timestamp - WINDOW) {
-            hits.poll();
+        int total = 0;
+        for (int i = 0; i < WND; ++i) {
+            if (times[i] + 300 > timestamp) {
+                total += hits[i];
+            }
         }
 
-        return hits.size();
+        return total;
     }
 }
 
