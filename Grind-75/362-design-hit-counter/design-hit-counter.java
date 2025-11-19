@@ -1,32 +1,28 @@
 class HitCounter {
     private static final int WND = 300;
-    private int[] times;
-    private int[] hits;
+    private List<Integer> hits;
 
     public HitCounter() {
-        times = new int[WND];
-        hits = new int[WND];
+        hits = new ArrayList<>();
     }
     
     public void hit(int timestamp) {
-        int idx = timestamp % WND;
-        if (times[idx] == timestamp) {
-            ++hits[idx];
-        } else {
-            hits[idx] = 1;
-            times[idx] = timestamp;
-        }
+        hits.add(timestamp);
     }
     
     public int getHits(int timestamp) {
-        int total = 0;
-        for (int i = 0; i < WND; ++i) {
-            if (times[i] + 300 > timestamp) {
-                total += hits[i];
+        int l = 0, r = hits.size() - 1;
+        int target = timestamp - WND;
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+            if (hits.get(m) <= target) {
+                l = m + 1;
+            } else {
+                r = m - 1;
             }
         }
 
-        return total;
+        return hits.size() -  l;
     }
 }
 
