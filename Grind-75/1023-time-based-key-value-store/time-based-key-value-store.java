@@ -1,57 +1,24 @@
 class TimeMap {
-
-    private class TimeValue {
-        public String value;
-        public int timestamp;
-        public TimeValue(String v, int t) {
-            value = v;
-            timestamp = t;
-        }
-    }
-
-    HashMap<String, ArrayList<TimeValue>> timeMap;
+    private Map<String, TreeMap<Integer, String>> store;
 
     public TimeMap() {
-        timeMap = new HashMap<>();
+        store = new HashMap<>();
     }
     
     public void set(String key, String value, int timestamp) {
-        if (!timeMap.containsKey(key)) {
-            ArrayList<TimeValue> list = new ArrayList<>();
-            list.add(new TimeValue(value, timestamp));
-            timeMap.put(key, list);
-            return;
+        if (!store.containsKey(key)) {
+            store.put(key, new TreeMap<>());
         }
-        timeMap.get(key).add(new TimeValue(value, timestamp));
-        // ArrayList<TimeValue> list = timeMap.get(key);
-        // int l = 0, r = list.size() - 1;
-        
-        // while (l <= r) {
-        //     int m = l + (r - l) / 2;
-        //     if (list.get(m).timestamp < timestamp) {
-        //         l = m + 1;
-        //     } else {
-        //         r = m - 1;
-        //     }
-        // }
-        // list.set(l, new TimeValue(value, timestamp));
+        store.get(key).put(timestamp, value);
     }
     
     public String get(String key, int timestamp) {
-        ArrayList<TimeValue> list = timeMap.get(key);
+        if (!store.containsKey(key)) return "";
+        TreeMap<Integer, String> history = store.get(key);
 
-        int l = 0, r = list == null ? -1 : list.size() - 1;
-        String res = "";
-        while (l <= r) {
-            int m = l + (r - l) / 2;
-            if (list.get(m).timestamp <= timestamp) {
-                l = m + 1;
-                res = list.get(m).value;
-            } else {
-                r = m - 1;
-            }
-        }
-        return res;
+        Integer tsKey = history.floorKey(timestamp);
+        if (tsKey == null) return "";
+        return history.get(tsKey);
     }
 }
 
