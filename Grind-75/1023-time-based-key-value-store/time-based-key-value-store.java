@@ -1,5 +1,15 @@
 class TimeMap {
-    private Map<String, TreeMap<Integer, String>> store;
+    private class TimeValue {
+        private int timestamp;
+        private String value;
+
+        public TimeValue(int t, String v) {
+            timestamp = t;
+            value = v;
+        }
+    }
+
+    private Map<String, ArrayList<TimeValue>> store;
 
     public TimeMap() {
         store = new HashMap<>();
@@ -7,18 +17,27 @@ class TimeMap {
     
     public void set(String key, String value, int timestamp) {
         if (!store.containsKey(key)) {
-            store.put(key, new TreeMap<>());
+            store.put(key, new ArrayList<>());
         }
-        store.get(key).put(timestamp, value);
+        store.get(key).add(new TimeValue(timestamp, value));
     }
     
     public String get(String key, int timestamp) {
         if (!store.containsKey(key)) return "";
-        TreeMap<Integer, String> history = store.get(key);
+        ArrayList<TimeValue> history = store.get(key);
 
-        Integer tsKey = history.floorKey(timestamp);
-        if (tsKey == null) return "";
-        return history.get(tsKey);
+        int l = 0, r = history.size() - 1;
+        String res = "";
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+            if (history.get(m).timestamp <= timestamp) {
+                l = m + 1;
+                res = history.get(m).value;
+            } else {
+                r = m - 1;
+            }
+        }
+        return res;
     }
 }
 
