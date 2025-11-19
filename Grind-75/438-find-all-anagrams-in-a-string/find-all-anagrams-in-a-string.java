@@ -11,15 +11,13 @@ class Solution {
 
         if (isZero(freq)) res.add(0);
 
-        for (int i = p.length(); i < s.length(); ++i) {
-            char r = s.charAt(i);
-            char l = s.charAt(i - p.length());
-            
-            --freq[l - 'a'];
-            ++freq[r - 'a'];
+        int l = 0;
+        for (int r = p.length(); r < s.length(); ++r, ++l) {            
+            --freq[s.charAt(l) - 'a'];
+            ++freq[s.charAt(r) - 'a'];
 
             if (isZero(freq)) {
-                res.add(i - p.length() + 1);
+                res.add(l + 1);
             }
         }
 
