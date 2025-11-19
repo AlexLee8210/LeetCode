@@ -16,7 +16,6 @@
 class Solution {
     public String getDirections(TreeNode root, int startValue, int destValue) {
         TreeNode ancestor = lca(root, startValue, destValue);
-        System.out.println(ancestor.val);
         String start = dfs(ancestor, startValue, new StringBuilder());
         String dest = dfs(ancestor, destValue, new StringBuilder());
         StringBuilder sb = new StringBuilder();
