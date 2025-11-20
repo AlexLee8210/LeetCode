@@ -1,18 +1,18 @@
 class SnapshotArray {
     private int nextSnapId;
-    private TreeMap<Integer, Integer>[] snapshots;
+    private List<int[]>[] snapshots;
 
     public SnapshotArray(int length) {
         nextSnapId = 0;
-        snapshots = new TreeMap[length];
+        snapshots = new ArrayList[length];
         for (int i = 0; i < length; ++i) {
-            snapshots[i] = new TreeMap<>();
-            snapshots[i].put(nextSnapId, 0);
+            snapshots[i] = new ArrayList<>();
+            snapshots[i].add(new int[]{nextSnapId, 0});
         }
     }
     
     public void set(int index, int val) {
-        snapshots[index].put(nextSnapId, val);
+        snapshots[index].add(new int[]{nextSnapId, val});
     }
     
     public int snap() {
@@ -20,7 +20,19 @@ class SnapshotArray {
     }
     
     public int get(int index, int snap_id) {
-        return snapshots[index].get(snapshots[index].floorKey(snap_id));
+        List<int[]> list = snapshots[index];
+        int l = 0, r = list.size() - 1;
+        int res = 0;
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+            if (list.get(m)[0] <= snap_id) {
+                res = list.get(m)[1];
+                l = m + 1;
+            } else {
+                r = m - 1;
+            }
+        }
+        return res;
     }
 }
 
