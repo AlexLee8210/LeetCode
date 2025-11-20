@@ -12,7 +12,11 @@ class SnapshotArray {
     }
     
     public void set(int index, int val) {
-        snapshots[index].add(new int[]{nextSnapId, val});
+        if (snapshots[index].getLast()[0] == nextSnapId) {
+            snapshots[index].getLast()[1] = val;
+        } else {
+            snapshots[index].add(new int[]{nextSnapId, val});
+        }
     }
     
     public int snap() {
