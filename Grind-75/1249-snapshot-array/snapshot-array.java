@@ -29,11 +29,13 @@ class SnapshotArray {
         int res = 0;
         while (l <= r) {
             int m = l + (r - l) / 2;
-            if (list.get(m)[0] <= snap_id) {
+            if (list.get(m)[0] < snap_id) {
                 res = list.get(m)[1];
                 l = m + 1;
-            } else {
+            } else if (list.get(m)[0] > snap_id) {
                 r = m - 1;
+            } else {
+                return list.get(m)[1];
             }
         }
         return res;
