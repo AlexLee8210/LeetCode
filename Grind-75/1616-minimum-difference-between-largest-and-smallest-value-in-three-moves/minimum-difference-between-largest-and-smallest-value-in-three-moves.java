@@ -18,11 +18,6 @@ class Solution {
             }
         }
 
-        int[] minElems = new int[4];
-        for (int i = 0; i < 4; ++i) {
-            minElems[i] = minHeap.poll();
-        }
-
         int[] maxElems = new int[4];
         for (int i = 3; i >= 0; --i) {
             maxElems[i] = maxHeap.poll();
@@ -30,7 +25,7 @@ class Solution {
 
         int minDiff = Integer.MAX_VALUE;
         for (int i = 0; i < 4; ++i) {
-            int diff = maxElems[i] - minElems[i];
+            int diff = maxElems[i] - minHeap.poll();
             minDiff = Math.min(diff, minDiff);
         }
         return minDiff;
