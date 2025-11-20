@@ -4,6 +4,7 @@ class Solution {
 
         PriorityQueue<Integer> minHeap = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
         for (int i = 0; i < nums.length; ++i) {
+            if (minHeap.size() > 4 && minHeap.peek() < nums[i]) continue;
             minHeap.offer(nums[i]);
             if (minHeap.size() > 4) {
                 minHeap.poll();
@@ -12,6 +13,7 @@ class Solution {
 
         PriorityQueue<Integer> maxHeap = new PriorityQueue<>();
         for (int i = 0; i < nums.length; ++i) {
+            if (maxHeap.size() > 4 && maxHeap.peek() > nums[i]) continue;
             maxHeap.offer(nums[i]);
             if (maxHeap.size() > 4) {
                 maxHeap.poll();
