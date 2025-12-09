@@ -4,7 +4,7 @@ class Solution {
         int l = 0, r = height.length - 1;
         int maxL = height[l], maxR = height[r];
         while (l < r) {
-            if (height[l] <= height[r]) {
+            if (maxL <= maxR) {
                 ++l;
                 maxL = Math.max(maxL, height[l]);
                 total += Math.max(Math.min(maxL, maxR) - height[l], 0);
