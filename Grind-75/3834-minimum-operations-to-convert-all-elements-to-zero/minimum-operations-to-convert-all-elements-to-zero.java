@@ -1,7 +1,7 @@
 class Solution {
     public int minOperations(int[] nums) {
         int ops = 0;
-        Stack<Integer> stack = new Stack<>();
+        Deque<Integer> stack = new LinkedList<>();
         for (int n : nums) {
             while (!stack.isEmpty() && stack.peek() > n) {
                 stack.pop();
