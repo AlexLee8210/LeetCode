@@ -2,6 +2,7 @@ class Solution {
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
         Deque<String> dq = new LinkedList<>();
         Set<String> vis = new HashSet<>();
+        Set<String> wordSet = new HashSet<>(wordList);
         dq.addLast(beginWord);
         int dist = 0;
 
@@ -12,12 +13,25 @@ class Solution {
                 String cur = dq.pollFirst();
                 if (cur.equals(endWord)) return dist;
                 
-                for (String word : wordList) {
-                    if (vis.contains(word)) continue;
-                    if (canTransform(cur, word)) {
-                        dq.addLast(word);
-                        vis.add(word);
+                // for (String word : wordList) {
+                //     if (vis.contains(word)) continue;
+                //     if (canTransform(cur, word)) {
+                //         dq.addLast(word);
+                //         vis.add(word);
+                //     }
+                // }
+                char[] newWord = cur.toCharArray();
+                for (int j = 0; j < cur.length(); ++j) {
+                    char tmp = newWord[j];
+                    for (int k = 'a'; k <= 'z'; ++k) {
+                        newWord[j] = (char) k;
+                        String word = new String(newWord);
+                        if (wordSet.contains(word) && !vis.contains(word)) {
+                            dq.addLast(word);
+                            vis.add(word);
+                        }
                     }
+                    newWord[j] = tmp;
                 }
             }
         }
