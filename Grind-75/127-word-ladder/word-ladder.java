@@ -10,13 +10,13 @@ class Solution {
             int size = dq.size();
             for (int i = 0; i < size; ++i) {
                 String cur = dq.pollFirst();
-                if (vis.contains(cur)) continue;
                 if (cur.equals(endWord)) return dist;
-                vis.add(cur);
+                
                 for (String word : wordList) {
                     if (vis.contains(word)) continue;
                     if (canTransform(cur, word)) {
                         dq.addLast(word);
+                        vis.add(word);
                     }
                 }
             }
