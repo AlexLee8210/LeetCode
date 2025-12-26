@@ -1,27 +1,25 @@
 class Solution {
     public boolean isValid(String s) {
         Stack<Character> stack = new Stack<>();
+        Map<Character, Character> openToClose = Map.of(
+            '(', ')',
+            '{', '}',
+            '[', ']'
+        );
+
         for (char c : s.toCharArray()) {
-            if (isOpen(c)) {
+            if (openToClose.containsKey(c)) {
                 stack.push(c);
-            } else if (stack.isEmpty() || stack.pop() != getOpen(c)) {
+            } else if (stack.isEmpty()) {
                 return false;
+            } else {
+                char open = stack.pop();
+                if (c != openToClose.get(open)) {
+                    return false;
+                }
             }
         }
+
         return stack.isEmpty();
-    }
-
-    private boolean isOpen(char c) {
-        return c == '(' || c == '[' || c == '{';
-    }
-
-    private char getOpen(char c) {
-        if (c == ')') {
-            return '(';
-        } else if (c == ']') {
-            return '[';
-        } else {
-            return '{';
-        }
     }
 }
