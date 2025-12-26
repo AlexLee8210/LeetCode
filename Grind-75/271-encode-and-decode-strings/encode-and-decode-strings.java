@@ -3,8 +3,8 @@ public class Codec {
     // Encodes a list of strings to a single string.
     public String encode(List<String> strs) {
         StringBuilder sb = new StringBuilder();
-        for (String k : strs) {
-            sb.append(k.length()).append("_").append(k);
+        for (String str : strs) {
+            sb.append(str.length()).append('#').append(str);
         }
         return sb.toString();
     }
@@ -12,23 +12,19 @@ public class Codec {
     // Decodes a single string to a list of strings.
     public List<String> decode(String s) {
         List<String> res = new ArrayList<>();
-        int n = 0;
-        int i = 0;
-        char[] chars = s.toCharArray();
-
-        while (i < chars.length) {
-            while (i < chars.length && chars[i] != '_' && Character.isDigit(chars[i])) {
-                n = n * 10 + (chars[i] - '0');
-                i++;
+        int idx = 0;
+        while (idx < s.length()) {
+            int len = 0;
+            while (idx < s.length() && s.charAt(idx) != '#') {
+                len = len * 10 + (int) (s.charAt(idx++) - '0');
             }
-            i++;
-            StringBuilder sb = new StringBuilder("");
-            for (int j = 0; j < n; j++) {
-                sb.append(chars[j + i]);
-            }
-            res.add(sb.toString());
-            i += n;
-            n = 0;
+            ++idx; // '#'
+            // StringBuilder sb = new StringBuilder(len);
+            // for (int i = 0; i < len; ++i) {
+            //     sb.append(s.charAt(idx - len + i));
+            // }
+            res.add(s.substring(idx, idx + len));
+            idx += len;
         }
         return res;
     }
