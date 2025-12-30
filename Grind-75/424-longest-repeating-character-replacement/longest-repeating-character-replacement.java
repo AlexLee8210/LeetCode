@@ -9,7 +9,7 @@ class Solution {
             ++freq[c - 'A'];
             maxf = Math.max(maxf, freq[c - 'A']);
 
-            while ((r - l + 1) - maxf > k) {
+            if ((r - l + 1) - maxf > k) {
                 --freq[s.charAt(l) - 'A'];
                 ++l;
             }
