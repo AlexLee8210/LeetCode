@@ -15,8 +15,7 @@ class Solution {
             slow = slow.next;
             fast = fast.next.next;
         }
-
-        // end first half
+        
         ListNode tmp = slow;
         slow = slow.next;
         tmp.next = null;
@@ -28,15 +27,15 @@ class Solution {
             prev = slow;
             slow = next;
         }
-        
-        // len(cur) >= len(prev)
+
         ListNode cur = head;
         while (prev != null) {
-            ListNode next = cur.next;
+            ListNode curNext = cur.next;
+            ListNode prevNext = prev.next;
             cur.next = prev;
-            prev = prev.next;
-            cur.next.next = next;
-            cur = next;
+            cur = curNext;
+            prev.next = curNext;
+            prev = prevNext;
         }
     }
 }
