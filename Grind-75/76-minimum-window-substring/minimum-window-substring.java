@@ -21,7 +21,7 @@ class Solution {
                 ++matches;
             }
 
-            while (matches >= tFreq.size()) {
+            while (matches == tFreq.size()) {
                 char lc = s.charAt(l);
                 if (!tFreq.containsKey(lc)) {
                     ++l;
