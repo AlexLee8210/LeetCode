@@ -11,7 +11,7 @@
 class Solution {
     public void reorderList(ListNode head) {
         if (head == null || head.next == null) return;
-        
+
         ListNode slow = head, fast = head, prev = null;
         while (fast != null && fast.next != null) {
             prev = slow;
@@ -26,12 +26,6 @@ class Solution {
             slow.next = prev;
             prev = slow;
             slow = next;
-        }
-
-        ListNode tmp = prev;
-        while (tmp != null) {
-            System.out.println(tmp.val);
-            tmp = tmp.next;
         }
         
         // len(cur2) >= len(cur1)
