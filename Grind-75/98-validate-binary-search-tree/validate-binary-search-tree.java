@@ -15,19 +15,22 @@
  */
 class Solution {
     public boolean isValidBST(TreeNode root) {
-        return isValidBSTHelper(root)[0] == 1;
-    }
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode prev = null;
+        while (root != null || !stack.isEmpty()) {
+            while (root != null) {
+                stack.push(root);
+                root = root.left;
+            }
 
-    private long[] isValidBSTHelper(TreeNode node) {
-        if (node == null) return new long[]{1, Long.MAX_VALUE, Long.MIN_VALUE};
-        long[] left = isValidBSTHelper(node.left);
-        if (left[0] == 0) return left;
-        long[] right = isValidBSTHelper(node.right);
-        if (right[0] == 0) return right;
-        
-        boolean valid = node.val > left[2] && node.val < right[1];
-        long min = Math.min(node.val, left[1]);
-        long max = Math.max(node.val, right[2]);
-        return new long[]{valid ? 1 : 0, min, max};
+            root = stack.pop();
+            if (prev != null && root.val <= prev.val) {
+                return false;
+            }
+            prev = root;
+            root = root.right;
+        }
+
+        return true;
     }
 }
