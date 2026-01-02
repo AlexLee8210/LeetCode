@@ -16,20 +16,17 @@
 class Solution {
     public int diameterOfBinaryTree(TreeNode root) {
         if (root == null) return 0;
-
-        int leftd = diameterOfBinaryTree(root.left);
-        int rightd = diameterOfBinaryTree(root.right);
-        int curd = height(root.left) + height(root.right);
-        return Math.max(curd, Math.max(leftd, rightd));
+        int[] diam = new int[]{0};
+        height(root, diam);
+        return diam[0];
     }
 
-    Map<TreeNode, Integer> heights = new HashMap<>();
-    private int height(TreeNode n) {
+    private int height(TreeNode n, int[] diam) {
         if (n == null) return 0;
-        if (heights.containsKey(n)) return heights.get(n);
 
-        int h = Math.max(height(n.left), height(n.right)) + 1;
-        heights.put(n, h);
-        return h;
+        int lh = height(n.left, diam);
+        int rh = height(n.right, diam);
+        diam[0] = Math.max(diam[0], lh + rh);
+        return Math.max(lh, rh) + 1;
     }
 }
