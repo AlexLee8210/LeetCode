@@ -15,33 +15,22 @@
  */
 class Solution {
     public boolean isSubtree(TreeNode root, TreeNode subRoot) {
-        if (subRoot == null) return true;
-        if (root == null) return false;
+        if (root == null && subRoot == null) return true;
+        if (root == null || subRoot == null) return false;
+
+        boolean isSub = false;
         if (root.val == subRoot.val) {
-            if (sameSubtree(root, subRoot)) return true;
+            isSub = isSameTree(root, subRoot);
         }
-        return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
+
+
+        return isSub || isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
     }
 
-    private boolean sameSubtree(TreeNode node, TreeNode subNode) {
-        if (node == null && subNode == null) {
-            return true;
-        } else if (node == null || subNode == null) {
-            return false;
-        } else if (node.val != subNode.val) {
-            return false;
-        }
-        return sameSubtree(node.left, subNode.left) && sameSubtree(node.right, subNode.right);
-    }
+    private boolean isSameTree(TreeNode p, TreeNode q) {
+        if (p == null && q == null) return true;
+        if (p == null || q == null) return false;
 
-    // private boolean solve(TreeNode node, TreeNode subRoot) {
-    //     if (node == null && subNode == null) {
-    //         return true;
-    //     } else if (node == null || subNode == null) {
-    //         return false;
-    //     } else if (node.val == subNode.val) {
-    //         sameSubTree(node, subNode);
-    //     }
-    //     return solve(node.left, subRoot) || solve(node.right, subRoot);
-    // }
+        return p.val == q.val && isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+    }
 }
