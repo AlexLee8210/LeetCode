@@ -22,13 +22,11 @@ class Solution {
 
     private void helper(TreeNode node, int level, List<Integer> res) {
         if (node == null) return;
-        if (level >= res.size()) {
+        if (level == res.size()) {
             res.add(node.val);
-        } else {
-            res.set(level, node.val);
         }
 
-        helper(node.left, level + 1, res);
         helper(node.right, level + 1, res);
+        helper(node.left, level + 1, res);
     }
 }
