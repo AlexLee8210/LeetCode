@@ -15,20 +15,12 @@
  */
 class Solution {
     public int goodNodes(TreeNode root) {
-        return dfs(root, root.val);
+        return helper(root, root.val);
     }
 
-    private int dfs(TreeNode node, int max) {
+    private int helper(TreeNode node, int max) {
         if (node == null) return 0;
-
-        int num = 0;
-        if (node.val >= max) {
-            max = node.val;
-            ++num;
-        }
-        num += dfs(node.left, max);
-        num += dfs(node.right, max);
-
-        return num;
+        max = Math.max(node.val, max);
+        return helper(node.left, max) + helper(node.right, max) + (node.val >= max ? 1 : 0);
     }
 }
