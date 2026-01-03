@@ -20,7 +20,6 @@ class Solution {
         return maxPath[0];
     }
 
-
     private int maxPathHelper(TreeNode root, int[] maxPath) {
         if (root == null) return 0;
         int left = maxPathHelper(root.left, maxPath);
