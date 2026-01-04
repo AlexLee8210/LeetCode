@@ -1,38 +1,34 @@
 class Solution {
-    private int[][] dirs = new int[][]{{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+    private int[][] dirs = new int[][]{{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
     public boolean exist(char[][] board, String word) {
         for (int r = 0; r < board.length; ++r) {
-            for (int c = 0; c < board[r].length; ++c) {
-                if (helper(board, word.toCharArray(), 0, r, c)) {
-                    return true;
-                }
+            for (int c = 0; c < board[0].length; ++c) {
+                if (dfs(board, word, 0, r, c, new boolean[board.length][board[0].length])) return true;
             }
         }
         return false;
     }
 
-    private boolean helper(char[][] board, char[] word, int index, int row, int col) {
-        if (index == word.length) return true;
+    private boolean inbounds(int r, int c, int m, int n) {
+        return 0 <= r && r < m && 0 <= c && c < n;
+    }
 
-        // if (vis[row][col]) return false;
-        if (board[row][col] != word[index]) return false;
+    private boolean dfs(char[][] board, String word, int idx, int r, int c, boolean[][] vis) {
+        if (idx == word.length()) return true;
+        if (word.charAt(idx) != board[r][c]) return false;
 
-        // vis[row][col] = true;
-        board[row][col] = '*';
+        vis[r][c] = true;
 
         for (int[] dir : dirs) {
-            int r = row + dir[0];
-            int c = col + dir[1];
-
-            if (r < 0 || r >= board.length || c < 0 || c >= board[r].length) continue;
-
-            if (helper(board, word, index + 1, r, c)) {
-                return true;
-            }
+            int nr = r + dir[0];
+            int nc = c + dir[1];
+            if (!inbounds(nr, nc, board.length, board[0].length)) continue;
+            if (vis[nr][nc]) continue;
+            if (dfs(board, word, idx + 1, nr, nc, vis)) return true;
         }
-        // vis[row][col] = false;
-        board[row][col] = word[index];
-        return index == word.length - 1;
+
+        vis[r][c] = false;
+        return idx == word.length() - 1;
     }
 }
