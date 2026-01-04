@@ -4,7 +4,7 @@ class Solution {
     public boolean exist(char[][] board, String word) {
         for (int r = 0; r < board.length; ++r) {
             for (int c = 0; c < board[0].length; ++c) {
-                if (dfs(board, word, 0, r, c, new boolean[board.length][board[0].length])) return true;
+                if (dfs(board, word, 0, r, c)) return true;
             }
         }
         return false;
@@ -14,21 +14,21 @@ class Solution {
         return 0 <= r && r < m && 0 <= c && c < n;
     }
 
-    private boolean dfs(char[][] board, String word, int idx, int r, int c, boolean[][] vis) {
+    private boolean dfs(char[][] board, String word, int idx, int r, int c) {
         if (idx == word.length()) return true;
         if (word.charAt(idx) != board[r][c]) return false;
 
-        vis[r][c] = true;
+        char tmp = board[r][c];
+        board[r][c] = '*';
 
         for (int[] dir : dirs) {
             int nr = r + dir[0];
             int nc = c + dir[1];
             if (!inbounds(nr, nc, board.length, board[0].length)) continue;
-            if (vis[nr][nc]) continue;
-            if (dfs(board, word, idx + 1, nr, nc, vis)) return true;
+            if (dfs(board, word, idx + 1, nr, nc)) return true;
         }
 
-        vis[r][c] = false;
+        board[r][c] = tmp;
         return idx == word.length() - 1;
     }
 }
