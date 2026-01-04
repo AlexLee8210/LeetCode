@@ -18,7 +18,6 @@ class Solution {
         if (idx == word.length()) return true;
         if (word.charAt(idx) != board[r][c]) return false;
 
-        char tmp = board[r][c];
         board[r][c] = '*';
 
         for (int[] dir : dirs) {
@@ -28,7 +27,7 @@ class Solution {
             if (dfs(board, word, idx + 1, nr, nc)) return true;
         }
 
-        board[r][c] = tmp;
+        board[r][c] = word.charAt(idx);
         return idx == word.length() - 1;
     }
 }
