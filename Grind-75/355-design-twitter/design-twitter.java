@@ -1,59 +1,34 @@
 class Twitter {
-    List<int[]>[] tweets;
-    Set<Integer>[] following;
-    private int time;
+    private Map<Integer, Set<Integer>> follows;
+    private List<int[]> tweets;
 
     public Twitter() {
-        tweets = new List[501];
-        following = new Set[501];
-        time = -1;
+        follows = new HashMap<>();
+        tweets = new ArrayList<>();
     }
     
     public void postTweet(int userId, int tweetId) {
-        if (tweets[userId] == null) {
-            follow(userId, userId);
-            tweets[userId] = new ArrayList<>();
-        }
-        tweets[userId].add(new int[]{tweetId, ++time});
+        tweets.add(new int[]{userId, tweetId});
     }
     
     public List<Integer> getNewsFeed(int userId) {
-        List<Integer> res = new LinkedList<>();
-
-        if (following[userId] == null) return res;
-
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]);
-        for (int followeeId : following[userId]) {
-            if (tweets[followeeId] == null) continue;
-            
-            List<int[]> tweetList = tweets[followeeId];
-            for (int i = tweetList.size() - 1; i >= 0; --i) {
-                if (pq.size() == 10 && tweetList.get(i)[1] < pq.peek()[1]) break;
-                pq.offer(tweetList.get(i));
-                if (pq.size() > 10) {
-                    pq.poll();
-                }
-            }
+        List<Integer> feed = new ArrayList<>(10);
+        Set<Integer> following = follows.getOrDefault(userId, new HashSet<>());
+        for (int i = tweets.size() - 1; i >= 0 && feed.size() < 10; --i) {
+            if (!following.contains(tweets.get(i)[0]) && tweets.get(i)[0] != userId) continue;
+            feed.add(tweets.get(i)[1]);
         }
-
-        while (!pq.isEmpty()) {
-            res.addFirst(pq.poll()[0]);
-        }
-        return res;
+        return feed;
     }
     
     public void follow(int followerId, int followeeId) {
-        if (following[followerId] == null) {
-            following[followerId] = new HashSet<>();
-        }
-        following[followerId].add(followeeId);
+        if (!follows.containsKey(followerId)) follows.put(followerId, new HashSet<>());
+        follows.get(followerId).add(followeeId);
     }
     
     public void unfollow(int followerId, int followeeId) {
-        if (following[followerId] == null) {
-            following[followerId] = new HashSet<>();
-        }
-        following[followerId].remove(followeeId);
+        if (!follows.containsKey(followerId)) return;
+        follows.get(followerId).remove(followeeId);
     }
 }
 
