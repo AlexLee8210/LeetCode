@@ -1,7 +1,8 @@
 class Solution {
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
         Queue<String> queue = new LinkedList<>();
-        Set<String> vis = new HashSet<>();
+        // Set<String> vis = new HashSet<>();
+        boolean[] vis = new boolean[wordList.size()];
         queue.offer(beginWord);
 
         int len = 0;
@@ -11,11 +12,12 @@ class Solution {
             for (int i = 0; i < size; ++i) {
                 String src = queue.poll();
                 if (src.equals(endWord)) return len;
-                for (String dst : wordList) {
-                    if (vis.contains(dst)) continue;
+                for (int j = 0; j < wordList.size(); ++j) {
+                    String dst = wordList.get(j);
+                    if (vis[j]) continue;
                     if (isValidNextWord(src, dst)) {
                         queue.offer(dst);
-                        vis.add(dst);
+                        vis[j] = true;
                     }
                 }
             }
