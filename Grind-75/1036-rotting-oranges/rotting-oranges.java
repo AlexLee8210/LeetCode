@@ -16,9 +16,7 @@ class Solution {
         }
 
         int minutes = 0;
-        int min = 0;
-        while (!queue.isEmpty()) {
-            ++minutes;
+        while (fresh > 0 && !queue.isEmpty()) {
             int size = queue.size();
 
             for (int i = 0; i < size; ++i) {
@@ -33,13 +31,13 @@ class Solution {
                     if (grid[nr][nc] != 1) continue;
 
                     grid[nr][nc] = 2;
-                    min = minutes;
                     --fresh;
                     queue.offer(new int[]{nr, nc});
                 }
             }
+            ++minutes;
         }
 
-        return fresh == 0 ? min : -1;
+        return fresh == 0 ? minutes : -1;
     }
 }
