@@ -1,29 +1,24 @@
 class Solution {
-
     public boolean validTree(int n, int[][] edges) {
-        ArrayList<Integer>[] adj = new ArrayList[n];
-        for (int i = 0; i < n; i++) {
-            adj[i] = new ArrayList<>();
-        }
+        List<Integer>[] adj = new List[n];
         for (int[] edge : edges) {
+            if (adj[edge[0]] == null) adj[edge[0]] = new ArrayList<>();
+            if (adj[edge[1]] == null) adj[edge[1]] = new ArrayList<>();
             adj[edge[0]].add(edge[1]);
             adj[edge[1]].add(edge[0]);
-        }
+        } 
 
-        boolean[] vis = new boolean[n];
-        if (!validTree(-1, 0, adj, vis)) return false;
-        for (boolean v : vis) {
-            if (!v) return false;
-        }
-        return true;
+        Set<Integer> vis = new HashSet<>();
+        return dfs(0, -1, adj, vis) && vis.size() == n;
     }
 
-    private boolean validTree(int par, int cur, ArrayList<Integer>[] adj, boolean[] vis) {
-        vis[cur] = true;
+    private boolean dfs(int cur, int prev, List<Integer>[] adj, Set<Integer> vis) {
+        if (vis.contains(cur)) return false;
+        vis.add(cur);
+        if (adj[cur] == null) return true;
         for (int neighbor : adj[cur]) {
-            if (neighbor == par) continue;
-            if (vis[neighbor]) return false;
-            if (!validTree(cur, neighbor, adj, vis)) return false;
+            if (neighbor == prev) continue;
+            if (!dfs(neighbor, cur, adj, vis)) return false;
         }
         return true;
     }
