@@ -1,50 +1,52 @@
 class Solution {
     private class UnionFind {
-        int[] parent;
-        int[] rank;
+        int[] par;
+        int[] size;
 
         public UnionFind(int n) {
-            parent = new int[n];
-            rank = new int[n];
-
-            for (int i = 0; i < n; i++) {
-                parent[i] = i;
-                rank[i] = 1;
+            par = new int[n];
+            size = new int[n];
+            for (int i = 0; i < n; ++i) {
+                par[i] = i;
+                size[i] = 1;
             }
         }
 
-        public int find(int n) {
-            if (parent[n] == n) return n;
+        public int find(int x) {
+            if (par[x] == x) return x;
 
-            int par = find(parent[n]);
-            parent[n] = par;
-            return par;
+            int res = find(par[x]);
+            par[x] = res;
+            return res;
         }
 
-        public boolean union(int a, int b) {
-            int par1 = find(a);
-            int par2 = find(b);
-
-            if (par1 == par2) {
-                return false;
-            } else if (rank[par1] < rank[par2]) {
-                parent[par1] = par2;
-                rank[par2] += rank[par1];
-            } else {
-                parent[par2] = par1;
-                rank[par1] += rank[par2];
+        public int union(int a, int b) {
+            if (a == b) return a;
+            if (size[a] < size[b]) {
+                int tmp = a;
+                a = b;
+                b = tmp;
             }
-            return true;
+
+            int root = find(a);
+            par[find(b)] = root;
+            return root;
         }
     }
     public int countComponents(int n, int[][] edges) {
         UnionFind uf = new UnionFind(n);
-
         for (int[] edge : edges) {
-            if (uf.union(edge[0], edge[1])) {
-                n--;
-            }
+            uf.union(edge[0], edge[1]);
         }
-        return n;
+
+        int count = 0;
+        boolean[] vis = new boolean[n];
+        for (int i = 0; i < n; ++i) {
+            int root = uf.find(i);
+            if (vis[root]) continue;
+            vis[root] = true;
+            ++count;
+        }
+        return count;
     }
 }
