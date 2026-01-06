@@ -27,7 +27,6 @@ class Solution {
                 int nr = r + dir[0];
                 int nc = c + dir[1];
                 if (nr < 0 || nr >= m || nc < 0 || nc >= n) continue;
-                if (grid[nr][nc] == '0') continue;
                 queue.offer(new int[]{nr, nc});
             }
         }
