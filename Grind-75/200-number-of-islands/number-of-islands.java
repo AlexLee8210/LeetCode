@@ -1,39 +1,35 @@
 class Solution {
     private int[][] dirs = new int[][]{{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
     public int numIslands(char[][] grid) {
-        int num = 0;
-        for (int r = 0; r < grid.length; ++r) {
-            for (int c = 0; c < grid[0].length; ++c) {
+        int count = 0;
+        int m = grid.length, n = grid[0].length;
+        for (int r = 0; r < m; ++r) {
+            for (int c = 0; c < n; ++c) {
                 if (grid[r][c] == '1') {
                     bfs(grid, r, c);
-                    ++num;
+                    ++count;
                 }
             }
         }
-
-        return num;
+        return count;
     }
 
-    private void bfs(char[][] grid, int r, int c) {
-        Queue<int[]> q = new LinkedList<>();
-        q.offer(new int[]{r, c});
-
-        while (!q.isEmpty()) {
-            int[] point = q.poll();
-            if (grid[point[0]][point[1]] == '0') continue;
-            grid[point[0]][point[1]] = '0';
+    private void bfs(char[][] grid, int row, int col) {
+        int m = grid.length, n = grid[0].length;
+        Queue<int[]> queue = new LinkedList<>();
+        queue.offer(new int[]{row, col});
+        while (!queue.isEmpty()) {
+            int[] pos = queue.poll();
+            int r = pos[0], c = pos[1];
+            if (grid[r][c] == '0') continue;
+            grid[r][c] = '0';
             for (int[] dir : dirs) {
-                int[] newPoint = new int[]{point[0] + dir[0], point[1] + dir[1]};
-                if (!isValidPoint(newPoint, grid.length, grid[0].length)) continue;
-                if (grid[newPoint[0]][newPoint[1]] != '1') continue;
-
-                q.offer(newPoint);
+                int nr = r + dir[0];
+                int nc = c + dir[1];
+                if (nr < 0 || nr >= m || nc < 0 || nc >= n) continue;
+                if (grid[nr][nc] == '0') continue;
+                queue.offer(new int[]{nr, nc});
             }
         }
-    }
-
-    private boolean isValidPoint(int[] point, int m, int n) {
-        return point[0] >= 0 && point[0] < m
-            && point[1] >= 0 && point[1] < n;
     }
 }
